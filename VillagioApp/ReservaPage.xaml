@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VillagioApp.ReservaPage"
+             Title="Reserva">
+
+    <ScrollView BackgroundColor="White">
+        <VerticalStackLayout Spacing="-20" Margin="0,30" >
+
+
+            <!-- Logo -->
+            <Image
+                Source="logo_villagio_v2.png"
+                HeightRequest="185"
+                Aspect="AspectFit"
+                Margin="0,0,0,30"
+                SemanticProperties.Description="Logo Villagio" />
+
+            <!-- Border do título -->
+            <Border
+                BackgroundColor="#F0F0F0"
+                Stroke="Purple"
+                StrokeShape="RoundRectangle 10"
+                WidthRequest="280"
+                Padding="20"
+                Margin="20,30,20,0">
+                <Label Text="Complete a reserva"
+                       FontSize="26"
+                       FontFamily="CanvasIn"
+                       HorizontalOptions="Center"
+                       TextColor="Black" />
+            </Border>
+
+
+
+            <!-- Border dos dados da reserva -->
+            <Border
+                BackgroundColor="#F0F0F0"
+                Stroke="Purple"
+                StrokeShape="RoundRectangle 15"
+                Padding="20"
+                Margin="20,10,20,20"
+                WidthRequest="380">
+
+                <VerticalStackLayout Spacing="15">
+
+                    <!-- Total de visitantes -->
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="8">
+                        <Label Text="Total de visitantes:"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="Green"
+                               WidthRequest="155"
+                               VerticalTextAlignment="Center" />
+
+                        <Button Text="−"
+                                Clicked="OnDiminuirTotalClicked"
+                                WidthRequest="25"
+                                HeightRequest="25"
+                                                               FontSize="12" FontFamily="Sans3"
+                                BackgroundColor="#F0F0F0"
+                                BorderColor="Purple"
+                                BorderWidth="1"
+                                CornerRadius="8"
+                                TextColor="Black"
+                                VerticalOptions="Center" />
+
+                        <Entry x:Name="TotalEntry"
+                               Placeholder="0"
+                               Keyboard="Numeric"
+                               WidthRequest="50"
+                               Background="Green"
+                               TextColor="White"
+                               FontSize="12" FontFamily="Sans3"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               VerticalOptions="Center" />
+
+                        <Button Text="+"
+                                Clicked="OnAumentarTotalClicked"
+                                WidthRequest="25"
+                                HeightRequest="25"
+                                                               FontSize="12" FontFamily="Sans3"
+                                BackgroundColor="#F0F0F0"
+                                BorderColor="Purple"
+                                BorderWidth="1"
+                                CornerRadius="8"
+                                TextColor="Black"
+                                VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <!-- Divisão por tipo -->
+                    <Label Text="Divisão por tipo:" FontSize="16" FontAttributes="Bold" TextColor="Green" Margin="0,0,0,20" />
+
+                    <!-- Adultos -->
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="8">
+                        <Label Text="Adultos (R$12,00):"
+                               FontSize="14"
+                               TextColor="Purple"
+                               WidthRequest="155"
+                               VerticalTextAlignment="Center" />
+
+                        <Button Text="−"
+                                Clicked="OnDiminuirAdultoClicked"
+                                WidthRequest="35"
+                                HeightRequest="15"
+                                BackgroundColor="#F0F0F0"
+                                BorderColor="Purple"
+                                BorderWidth="1"
+                                CornerRadius="8"
+                                                               FontSize="12" FontFamily="Sans3"
+                                TextColor="Black"
+                                VerticalOptions="Center" />
+
+                        <Entry x:Name="AdultoEntry"
+                               Placeholder="0"
+                               Keyboard="Numeric"
+                               WidthRequest="50"
+                                                              FontSize="12" FontFamily="Sans3"
+                               Background="Green"
+                               TextColor="White"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               VerticalOptions="Center" />
+
+                        <Button Text="+"
+                                Clicked="OnAumentarAdultoClicked"
+                                WidthRequest="25"
+                                HeightRequest="25"
+                                BackgroundColor="#F0F0F0"
+                                BorderColor="Purple"
+                                BorderWidth="1"
+                                CornerRadius="8"
+                                                               FontSize="12" FontFamily="Sans3"
+                                TextColor="Black"
+                                VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <!-- Meia entrada -->
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="8">
+                        <Label Text="Meia entrada (R$6,00):"
+                               FontSize="14"
+                               TextColor="Purple"
+                               WidthRequest="155"
+                               VerticalTextAlignment="Center" />
+
+                        <Button Text="−"
+                                Clicked="OnDiminuirMeiaClicked"
+                                WidthRequest="25"
+                                HeightRequest="25"
+                                                               FontSize="12" FontFamily="Sans3"
+                                BackgroundColor="#F0F0F0"
+                                BorderColor="Purple"
+                                BorderWidth="1"
+                                CornerRadius="8"
+                                TextColor="Black"
+                                VerticalOptions="Center" />
+
+                        <Entry x:Name="MeiaEntry"
+                               Placeholder="0"
+                               Keyboard="Numeric"
+                               WidthRequest="50"
+                               Background="Green"
+                               TextColor="White"
+                                                              FontSize="12" FontFamily="Sans3"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               VerticalOptions="Center" />
+
+                        <Button Text="+"
+                                Clicked="OnAumentarMeiaClicked"
+                                WidthRequest="25"
+                                HeightRequest="25"
+                                                               FontSize="12" FontFamily="Sans3"
+                                BackgroundColor="#F0F0F0"
+                                BorderColor="Purple"
+                                BorderWidth="1"
+                                CornerRadius="8"
+                                TextColor="Black"
+                                VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <!-- Não pagantes -->
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="8">
+                        <Label Text="Não pagantes (R$0,00):"
+                               FontSize="14"
+                               TextColor="Purple"
+                               WidthRequest="155"
+                               VerticalTextAlignment="Center" />
+
+                        <Button Text="−"
+                                Clicked="OnDiminuirNaoPaganteClicked"
+                                WidthRequest="25"
+                                HeightRequest="25"
+                                                               FontSize="12" FontFamily="Sans3"
+                                BackgroundColor="#F0F0F0"
+                                BorderColor="Purple"
+                                BorderWidth="1"
+                                CornerRadius="8"
+                                TextColor="Black"
+                                VerticalOptions="Center" />
+
+                        <Entry x:Name="NaoPaganteEntry"
+                               Placeholder="0"
+                               Keyboard="Numeric"
+                               WidthRequest="50"
+                               Background="Green"
+                               TextColor="White"
+                                                              FontSize="12" FontFamily="Sans3"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"
+                               VerticalOptions="Center" />
+
+                        <Button Text="+"
+                                Clicked="OnAumentarNaoPaganteClicked"
+                                WidthRequest="25"
+                                HeightRequest="25"
+                                                               FontSize="12" FontFamily="Sans3"
+                                BackgroundColor="#F0F0F0"
+                                BorderColor="Purple"
+                                BorderWidth="1"
+                                CornerRadius="8"
+                                TextColor="Black"
+                                VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+
+                    <!-- Café opcional -->
+                    <Border BackgroundColor="#F0F0F0"
+                            Stroke="Green"
+                            StrokeShape="RoundRectangle 10"
+                            Padding="10"
+                            Margin="0,10,0,0"
+                            WidthRequest="300"
+                            HorizontalOptions="Center">
+                        <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                            <Label Text="Incluir café da manhã?" FontSize="18" VerticalTextAlignment="Center" TextColor="Green" />
+                            <CheckBox x:Name="CafeCheckBox" CheckedChanged="OnCafeCheckedChanged" />
+                        </HorizontalStackLayout>
+                    </Border>
+
+                    <!-- Valor final -->
+                    <Label x:Name="ValorFinalLabel"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="Green"
+                           HorizontalOptions="Center"
+                           Margin="0,20,0,0" />
+
+                    <!-- Botão confirmar -->
+                    <Button Text="Confirmar Reserva"
+                            Clicked="OnConfirmarReservaClicked"
+                            BackgroundColor="Green"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="10"
+                            Margin="40,10"
+                            HeightRequest="45"
+                            HorizontalOptions="Center"
+                            WidthRequest="250" />
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+

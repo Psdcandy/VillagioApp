@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VillagioApp.CalendarioPage">
+
+    <ScrollView BackgroundColor="White">
+        <VerticalStackLayout Spacing="-10" Margin="0,50">
+
+
+            <Image
+                Source="logo_villagio_v2.png"
+                HeightRequest="185"
+                Aspect="AspectFit"
+                Margin="0,0,0,30"
+                SemanticProperties.Description="Logo Villagio" />
+
+            <!-- Border da Label -->
+            <Border
+                BackgroundColor="#F0F0F0"
+                Stroke="Purple"
+                StrokeShape="RoundRectangle 10"
+                WidthRequest="300"
+                HeightRequest="85"
+                Margin="20,50,20,0"
+>
+
+                <Label Text="Mês de visitação"
+                       FontSize="26"
+                       FontFamily="CanvasIn"
+                       FontAttributes="Italic"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"
+                       TextColor="Black" />
+            </Border>
+
+            <!-- Border dos botões -->
+            <Border
+                BackgroundColor="#F0F0F0"
+                Stroke="Purple"
+                StrokeShape="RoundRectangle 15"
+                WidthRequest="400"
+                HeightRequest="220"
+                Padding="0"
+                Margin="0">
+
+                <VerticalStackLayout Padding="1,0" Spacing="20" VerticalOptions="Center">
+
+                    <!-- Linha 1 -->
+                    <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
+                        <Button Text="{Binding Meses[0]}"
+                                Clicked="OnMesSelecionado"
+                                CommandParameter="0"
+                                                                HeightRequest="70" WidthRequest="110" FontFamily="Sans3"
+                                FontSize="Micro" BackgroundColor="White"
+                                TextColor="Black" BorderColor="Green" BorderWidth="2"/>
+                        <Button Text="{Binding Meses[1]}"
+                                Clicked="OnMesSelecionado"
+                                CommandParameter="1"
+                                                                HeightRequest="70" WidthRequest="110" FontFamily="Sans3"
+                                FontSize="Micro" BackgroundColor="White"
+                                TextColor="Black" BorderColor="Green" BorderWidth="2"/>
+                        <Button Text="{Binding Meses[2]}"
+                                Clicked="OnMesSelecionado"
+                                CommandParameter="2"
+                                                                HeightRequest="70" WidthRequest="110" FontFamily="Sans3"
+                                FontSize="Micro" BackgroundColor="White"
+                                TextColor="Black" BorderColor="Green" BorderWidth="2"/>
+                    </HorizontalStackLayout>
+
+                    <!-- Linha 2 -->
+                    <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
+                        <Button Text="{Binding Meses[3]}"
+                                Clicked="OnMesSelecionado"
+                                CommandParameter="3"
+                                                                HeightRequest="70" WidthRequest="110" FontFamily="Sans3"
+                                FontSize="Micro" BackgroundColor="White"
+                                TextColor="Black" BorderColor="Green" BorderWidth="2"/>
+                        <Button Text="{Binding Meses[4]}"
+                                Clicked="OnMesSelecionado"
+                                CommandParameter="4"
+                                                                HeightRequest="70" WidthRequest="110" FontFamily="Sans3"
+                                FontSize="Micro" BackgroundColor="White"
+                                TextColor="Black" BorderColor="Green" BorderWidth="2"/>
+                        <Button Text="{Binding Meses[5]}"
+                                Clicked="OnMesSelecionado"
+                                CommandParameter="5"
+                                                                HeightRequest="70" WidthRequest="110" FontFamily="Sans3"
+                                FontSize="Micro" BackgroundColor="White"
+                                TextColor="Black" BorderColor="Green" BorderWidth="2"/>
+                    </HorizontalStackLayout>
+
+                </VerticalStackLayout>
+
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

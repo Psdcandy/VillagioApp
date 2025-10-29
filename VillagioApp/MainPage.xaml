@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VillagioApp.MainPage">
+
+    <ScrollView BackgroundColor="White">
+        <VerticalStackLayout Spacing="-10" Margin="0,110,0,0" BackgroundColor="White">
+
+
+            <Image
+                Source="logo_villagio_v2.png"
+                HeightRequest="185"
+                Aspect="AspectFit"
+                SemanticProperties.Description="dot net bot in a hovercraft number nine" />
+
+            <!-- Border da Label -->
+            <Border
+                BackgroundColor="#F0F0F0"
+                Stroke="Purple"
+                StrokeShape="RoundRectangle 10"
+                WidthRequest="250"
+                Padding="20"
+                Margin="20,80,20,0"
+                >
+
+                <Label Text="Escolha uma das opções"
+                       FontSize="26"
+                       FontFamily="CanvasIn"
+                       HorizontalOptions="Center"
+                       TextColor="Black" />
+            </Border>
+
+            <!-- Border dos Botões -->
+            <Border
+                BackgroundColor="#F0F0F0"
+                Stroke="Purple"
+                StrokeShape="RoundRectangle 15"
+                WidthRequest="340"
+                HeightRequest="200"
+                Padding="20"
+                Margin="20,0,20,20">
+
+                <VerticalStackLayout Padding="30,0" Spacing="25" VerticalOptions="Center">
+
+                    <Button Text="Agência"
+                            WidthRequest="220"
+                            HeightRequest="60"
+                            FontSize="24"
+                            FontFamily="Sans3"
+                            BackgroundColor="#C9C8C8"
+                            TextColor="Black"
+                            CornerRadius="10" 
+                            BorderColor="Green"
+                            BorderWidth="2"
+                            Clicked="OnCounterClicked"/>
+
+                    <Button Text="Família"
+                            WidthRequest="220"
+                            HeightRequest="60"
+                            FontSize="24"
+                            FontFamily="Sans3"
+                            BackgroundColor="#C9C8C8"
+                            BorderColor="Green"
+                            BorderWidth="2"
+                            TextColor="Black"
+                            CornerRadius="10" 
+                            Clicked="Aula1_Clicked"/>
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

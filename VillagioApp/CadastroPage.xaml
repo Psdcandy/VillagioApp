@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VillagioApp.CadastroPage">
+
+    <ScrollView BackgroundColor="White">
+        <VerticalStackLayout Spacing="-10" Margin="0,110">
+
+            <Image
+                Source="logo_villagio_v2.png"
+                HeightRequest="185"
+                Aspect="AspectFit"
+                SemanticProperties.Description="Logo Villagio"
+                />
+
+            <!-- Border da Label -->
+            <Border
+                BackgroundColor="#F0F0F0"
+                Stroke="Purple"
+                StrokeShape="RoundRectangle 10"
+                WidthRequest="250"
+                Padding="20"
+                Margin="20,50,20,0">
+
+                <Label Text="Cadastre-se"
+                       FontSize="26"
+                       FontFamily="CanvasIn"
+                       FontAttributes="Italic"
+                       HorizontalOptions="Center"
+                       TextColor="Black" />
+            </Border>
+
+            <!-- Border dos campos de cadastro -->
+            <Border
+                BackgroundColor="#F0F0F0"
+                Stroke="Purple"
+                    StrokeThickness="1"
+                StrokeShape="RoundRectangle 15"
+                WidthRequest="340"
+                Padding="20"
+                Margin="20,0,20,20">
+
+                <VerticalStackLayout Padding="30,0" Spacing="20"
+                     VerticalOptions="Center">
+
+                    <Entry x:Name="NomeEntry"
+           Placeholder="Nome"
+           WidthRequest="220"
+           HeightRequest="40"
+           FontSize="16"
+           BackgroundColor="White"
+           TextColor="Black" />
+
+                    <Entry x:Name="TelefoneEntry"
+           Placeholder="Telefone"
+           WidthRequest="220"
+           HeightRequest="40"
+           FontSize="16"
+           BackgroundColor="White"
+           TextColor="Black"
+           Keyboard="Telephone"
+           />
+
+                    <Entry x:Name="SenhaEntry"
+           Placeholder="Senha"
+           WidthRequest="220"
+           HeightRequest="40"
+           FontSize="16"
+           BackgroundColor="White"
+           TextColor="Black"
+           IsPassword="True" />
+
+                    <Button Text="Cadastrar"
+            WidthRequest="220"
+            HeightRequest="50"
+            FontSize="20"
+            FontFamily="Sans3"
+            BackgroundColor="#C9C8C8"
+            TextColor="Black"
+                            BorderColor="Green"
+                            BorderWidth="2"
+            CornerRadius="10"
+            Clicked="Cadastrar_Clicked" />
+
+                </VerticalStackLayout>
+            </Border>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

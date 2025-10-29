@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" ?>
+    <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VillagioApp.HorariosPage"
+             Title="Horários disponíveis">
+
+    <ScrollView BackgroundColor="White">
+        <VerticalStackLayout Spacing="-10" Margin="0,110">
+
+            <!-- Logo -->
+            <Image
+                Source="logo_villagio_v2.png"
+                HeightRequest="185"
+                Aspect="AspectFit"
+                Margin="0,0,0,50"
+                SemanticProperties.Description="Logo Villagio" />
+
+            <!-- Layout das semanas -->
+            <VerticalStackLayout x:Name="SemanasLayout" Spacing="-20" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

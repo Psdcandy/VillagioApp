@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VillagioApp.VisitantesPage"
+             Title="Visitantes">
+
+    <ScrollView BackgroundColor="White">
+        <VerticalStackLayout Spacing="-10" Margin="0,111,1,1">
+
+            <Image
+                Source="logo_villagio_v2.png"
+                HeightRequest="185"
+                Aspect="AspectFit"
+                SemanticProperties.Description="Logo Villagio" />
+
+
+            <Border
+                BackgroundColor="#F0F0F0"
+                Stroke="Purple"
+                StrokeShape="RoundRectangle 10"
+                WidthRequest="300"
+                Padding="20"
+                Margin="20,110,20,0">
+
+
+                <VerticalStackLayout Spacing="15" VerticalOptions="Center">
+
+                    <Label Text="Quantos visitantes serão?"
+                           FontSize="26"
+                           FontFamily="CanvasIn"
+                           FontAttributes="Italic"
+                           HorizontalOptions="Center"
+                           TextColor="Black" />
+
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                        <Button Text="−"
+                                Clicked="OnDiminuirClicked"
+                                WidthRequest="40"
+                                HeightRequest="40"
+                                BackgroundColor="#F0F0F0"
+                                BorderColor="Green"
+                                BorderWidth="2"
+                                CornerRadius="10"
+                                TextColor="Black" />
+
+                        <Entry x:Name="VisitantesEntry"
+                               Placeholder="0"
+                               Keyboard="Numeric"
+                               WidthRequest="100"
+                               Background="Green"
+                               TextColor="White"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center" />
+
+                        <Button Text="+"
+                                Clicked="OnAumentarClicked"
+                                WidthRequest="40"
+                                HeightRequest="40"
+                                BackgroundColor="#F0F0F0"
+                                BorderColor="Green"
+                                BorderWidth="2"
+                                CornerRadius="10"
+                                TextColor="Black" />
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Botão continuar -->
+            <HorizontalStackLayout HorizontalOptions="Center" Margin="0,20,0,10">
+                <Button Text="Continuar"
+                        Clicked="OnContinuarClicked"
+                        BackgroundColor="White"
+                        TextColor="Black"
+                        BorderColor="Green"
+                        BorderWidth="2"
+                        CornerRadius="10"
+                        WidthRequest="150"
+                        HeightRequest="40" />
+            </HorizontalStackLayout>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+</ContentPage>
