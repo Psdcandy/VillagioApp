@@ -1,5 +1,4 @@
-﻿using VillagioApp; // Certifique-se de que esse namespace está correto
-using Microsoft.Maui.Controls;
+﻿using Microsoft.Maui.Controls;
 
 namespace VillagioApp;
 

@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using VillagioApp.Data;
 
 namespace VillagioApp
 {
@@ -7,6 +9,17 @@ namespace VillagioApp
         public static MauiApp CreateMauiApp()
         {
             var builder = MauiApp.CreateBuilder();
+
+            // Simulação da leitura do appsettings.json
+            var connectionString = "Server=JUN0675619W11-1\\BDSENAC;Initial Catalog=DBAPPVILLAGIOMICHELIN;User Id=senaclivre;Password='senaclivre';TrustServerCertificate=yes";
+
+            // Registro do DBContext com a string de conexão
+            builder.Services.AddDbContext<DBContext>(options =>
+                options.UseSqlServer(connectionString));
+
+            // Registrar a MainPage com injeção de dependência
+            builder.Services.AddTransient<MainPage>();
+
             builder
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
@@ -16,7 +29,7 @@ namespace VillagioApp
                 });
 
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();
