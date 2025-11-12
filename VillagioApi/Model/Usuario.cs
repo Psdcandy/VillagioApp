@@ -8,6 +8,8 @@
         public string? Email { get; set; }
         public string? CNPJ { get; set; }
         public required string Senha { get; set; }
-        public byte Tipo { get; set; } // 0 = ADM, 1 = Família, 2 = Agência
+        public int TipoUsuarioId { get; set; }
+        public TipoUsuario? TipoUsuario { get; set; }
     }
+
 }

@@ -11,7 +11,7 @@ namespace VillagioApp
             var builder = MauiApp.CreateBuilder();
 
             // Simulação da leitura do appsettings.json
-            var connectionString = "Server=JUN0675619W11-1\\BDSENAC;Initial Catalog=DBAPPVILLAGIOMICHELIN;User Id=senaclivre;Password='senaclivre';TrustServerCertificate=yes";
+            var connectionString = "Server=JUN0675605W11-1\\BDSENAC;Initial Catalog=DBAPPVILLAGIOMICHELIN;User Id=senaclivre;Password='senaclivre';TrustServerCertificate=yes";
 
             // Registro do DBContext com a string de conexão
             builder.Services.AddDbContext<DBContext>(options =>

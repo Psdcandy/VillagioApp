@@ -1,5 +1,7 @@
 using System;
+using System.Net.Http.Json;
 using Microsoft.Maui.Controls;
+using VillagioApp.Resources.Models;
 
 namespace VillagioApp;
 
@@ -13,6 +15,7 @@ public partial class CadastroAgenciaPage : ContentPage
         tipoAgencia = tipo; // Recebe o tipo da agência
     }
 
+
     private async void CadastrarAgencia_Clicked(object sender, EventArgs e)
     {
         string nome = NomeEntry.Text?.Trim() ?? "";
@@ -21,41 +24,31 @@ public partial class CadastroAgenciaPage : ContentPage
         string cnpj = CnpjEntry.Text?.Trim() ?? "";
         string senha = SenhaEntry.Text ?? "";
 
-        if (string.IsNullOrWhiteSpace(nome))
+        // Validações (mantém as que você já fez)
+
+        var agencia = new AgenciaCadastroDto
         {
-            await DisplayAlert("Erro", "Por favor, preencha o nome.", "OK");
-            return;
-        }
+            Nome = nome,
+            Telefone = telefone,
+            Email = email,
+            CNPJ = cnpj,
+            Senha = senha,
+            TipoUsuarioId = 2 // Agência
+        };
 
-        if (string.IsNullOrWhiteSpace(telefone) || telefone.Length < 10)
+        using var client = new HttpClient();
+        client.BaseAddress = new Uri("https://localhost:7148/swagger/index.html");
+        var response = await client.PostAsJsonAsync("usuarios", agencia);
+
+        if (response.IsSuccessStatusCode)
         {
-            await DisplayAlert("Erro", "Telefone inválido.", "OK");
-            return;
+            await DisplayAlert("Sucesso", "Cadastro realizado com sucesso!", "OK");
+            await Navigation.PushAsync(new CalendarioPage());
         }
-
-        if (string.IsNullOrWhiteSpace(email) || !email.Contains("@"))
+        else
         {
-            await DisplayAlert("Erro", "Email inválido.", "OK");
-            return;
+            var erro = await response.Content.ReadAsStringAsync();
+            await DisplayAlert("Erro", $"Falha no cadastro: {erro}", "OK");
         }
-
-        if (string.IsNullOrWhiteSpace(cnpj) || cnpj.Length != 14)
-        {
-            await DisplayAlert("Erro", "CNPJ inválido. Deve conter 14 dígitos.", "OK");
-            return;
-        }
-
-        if (string.IsNullOrWhiteSpace(senha) || senha.Length < 6)
-        {
-            await DisplayAlert("Erro", "A senha deve ter pelo menos 6 caracteres.", "OK");
-            return;
-        }
-
-        // Aqui você pode usar tipoAgencia para salvar no banco
-        // Exemplo: await ApiService.CadastrarAgencia(nome, telefone, email, cnpj, senha, tipoAgencia);
-
-        await DisplayAlert("Sucesso", "Cadastro da agência realizado com sucesso!", "OK");
-
-        await Navigation.PushAsync(new CalendarioPage());
     }
 }

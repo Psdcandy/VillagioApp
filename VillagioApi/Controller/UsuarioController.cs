@@ -9,9 +9,9 @@ namespace VillagioApi.Controllers
     [Route("api/[controller]")]
     public class UsuarioController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly DBContext _context;
 
-        public UsuarioController(AppDbContext context)
+        public UsuarioController(DBContext context)
         {
             _context = context;
         }
@@ -19,14 +19,14 @@ namespace VillagioApi.Controllers
         [HttpPost("cadastrar")]
         public async Task<IActionResult> Cadastrar([FromBody] Usuario usuario)
         {
-            if (usuario.Tipo == 1) // Família
+            if (usuario.TipoUsuarioId == 1) // Família
             {
                 if (string.IsNullOrEmpty(usuario.Nome) || string.IsNullOrEmpty(usuario.Telefone) || string.IsNullOrEmpty(usuario.Senha))
                     return BadRequest("Família deve informar Nome, Telefone e Senha.");
                 usuario.CNPJ = null;
                 usuario.Email = null;
             }
-            else if (usuario.Tipo == 2) // Agência
+            else if (usuario.TipoUsuarioId == 2) // Agência
             {
                 if (string.IsNullOrEmpty(usuario.Nome) || string.IsNullOrEmpty(usuario.Telefone) ||
                     string.IsNullOrEmpty(usuario.Senha) || string.IsNullOrEmpty(usuario.Email) || string.IsNullOrEmpty(usuario.CNPJ))
@@ -66,7 +66,7 @@ namespace VillagioApi.Controllers
             usuario.Senha = usuarioAtualizado.Senha;
             usuario.Email = usuarioAtualizado.Email;
             usuario.CNPJ = usuarioAtualizado.CNPJ;
-            usuario.Tipo = usuarioAtualizado.Tipo;
+            usuario.TipoUsuarioId = usuarioAtualizado.TipoUsuarioId;
 
             await _context.SaveChangesAsync();
             return Ok(usuario);

@@ -3,14 +3,16 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Define a string de conexão
 var strConn = builder.Environment.IsDevelopment()
     ? builder.Configuration.GetConnectionString("strConnExterna")
     : builder.Configuration.GetConnectionString("strConnExterna");
 
-builder.Services.AddDbContext<VillagioApi.Data.AppDbContext>(options =>
-options.UseSqlServer(strConn));
+// Registra o DBContext com a conexão SQL Server
+builder.Services.AddDbContext<DBContext>(options =>
+    options.UseSqlServer(strConn));
 
-// Adiciona serviços do Swagger
+// Adiciona Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
