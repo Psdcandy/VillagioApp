@@ -6,20 +6,15 @@
     <ScrollView BackgroundColor="White">
         <VerticalStackLayout Spacing="-10" Margin="0,110">
 
+            <!-- Logo -->
             <Image
                 Source="logo_villagio_v2.png"
                 HeightRequest="185"
                 Aspect="AspectFit"
-                SemanticProperties.Description="Logo Villagio"
-                />
+                SemanticProperties.Description="Logo Villagio" />
 
             <!-- Border da Label -->
             <Border
-                BackgroundColor="#F0F0F0"
-                Stroke="Purple"
-                StrokeShape="RoundRectangle 10"
-                WidthRequest="250"
-                Padding="20"
                 Margin="20,50,20,0">
 
                 <Label Text="Cadastre-se"
@@ -34,53 +29,56 @@
             <Border
                 BackgroundColor="#F0F0F0"
                 Stroke="Purple"
-                    StrokeThickness="1"
+                StrokeThickness="1"
                 StrokeShape="RoundRectangle 15"
                 WidthRequest="340"
                 Padding="20"
                 Margin="20,0,20,20">
 
                 <VerticalStackLayout Padding="30,0" Spacing="20"
-                     VerticalOptions="Center">
+                                     VerticalOptions="Center">
 
+                    <!-- Nome -->
                     <Entry x:Name="NomeEntry"
-           Placeholder="Nome"
-           WidthRequest="220"
-           HeightRequest="40"
-           FontSize="16"
-           BackgroundColor="White"
-           TextColor="Black" />
+                           Placeholder="Nome"
+                           WidthRequest="220"
+                           HeightRequest="40"
+                           FontSize="16"
+                           BackgroundColor="White"
+                           TextColor="Black" />
 
+                    <!-- Telefone -->
                     <Entry x:Name="TelefoneEntry"
-           Placeholder="Telefone"
-           WidthRequest="220"
-           HeightRequest="40"
-           FontSize="16"
-           BackgroundColor="White"
-           TextColor="Black"
-           Keyboard="Telephone"
-           />
+                           Placeholder="Telefone"
+                           WidthRequest="220"
+                           HeightRequest="40"
+                           FontSize="16"
+                           BackgroundColor="White"
+                           TextColor="Black"
+                           Keyboard="Telephone" />
 
+                    <!-- Senha -->
                     <Entry x:Name="SenhaEntry"
-           Placeholder="Senha"
-           WidthRequest="220"
-           HeightRequest="40"
-           FontSize="16"
-           BackgroundColor="White"
-           TextColor="Black"
-           IsPassword="True" />
+                           Placeholder="Senha"
+                           WidthRequest="220"
+                           HeightRequest="40"
+                           FontSize="16"
+                           BackgroundColor="White"
+                           TextColor="Black"
+                           IsPassword="True" />
 
+                    <!-- Botão de cadastro -->
                     <Button Text="Cadastrar"
-            WidthRequest="220"
-            HeightRequest="50"
-            FontSize="20"
-            FontFamily="Sans3"
-            BackgroundColor="#C9C8C8"
-            TextColor="Black"
+                            WidthRequest="220"
+                            HeightRequest="50"
+                            FontSize="20"
+                            FontFamily="Sans3"
+                            BackgroundColor="#C9C8C8"
+                            TextColor="Black"
                             BorderColor="Green"
                             BorderWidth="2"
-            CornerRadius="10"
-            Clicked="Cadastrar_Clicked" />
+                            CornerRadius="10"
+                            Clicked="Cadastrar_Clicked" />
 
                 </VerticalStackLayout>
             </Border>

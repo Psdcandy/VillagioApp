@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="VillagioApp.CadastroAgenciaPage">
+             x:Class="VillagioApp.LoginPage">
 
     <ScrollView BackgroundColor="White">
         <VerticalStackLayout Spacing="-10" Margin="0">
 
             <Image
-                Source="logo_villagio_v2.png"
-                HeightRequest="185"
-                Aspect="AspectFit"
-                Margin="0,20,0,30"
-                SemanticProperties.Description="Logo Villagio" />
+    Source="logo_villagio_v2.png"
+    HeightRequest="185"
+    Aspect="AspectFit"
+    Margin="0,20,0,30"
+    SemanticProperties.Description="Logo Villagio" />
 
-            <!-- Border da Label -->
             <Border
                 BackgroundColor="#F0F0F0"
                 Stroke="Black"
@@ -22,15 +21,14 @@
                 Padding="20"
                 Margin="20,10,20,0">
 
-                <Label Text="Cadastre-se"
+                <Label Text="Login"
                        FontSize="26"
                        FontFamily="CanvasIn"
                        FontAttributes="Italic"
-                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
                        TextColor="Black" />
             </Border>
 
-            <!-- Border dos campos de cadastro -->
             <Border
                 BackgroundColor="#F0F0F0"
                 Stroke="Black"
@@ -42,30 +40,6 @@
                 <VerticalStackLayout Padding="30,0" Spacing="20"
                                      VerticalOptions="Center">
 
-                    <!-- Nome da agência -->
-                    <Entry x:Name="NomeEntry"
-                           Placeholder="Nome da agência"
-                           FontSize="16"
-                           BackgroundColor="White"
-                           TextColor="Black" />
-
-                    <!-- CNPJ -->
-                    <Entry x:Name="CnpjEntry"
-                           Placeholder="CNPJ"
-                           FontSize="16"
-                           BackgroundColor="White"
-                           TextColor="Black"
-                           Keyboard="Numeric" />
-
-                    <!-- Telefone -->
-                    <Entry x:Name="TelefoneEntry"
-                           Placeholder="Telefone"
-                           FontSize="16"
-                           BackgroundColor="White"
-                           TextColor="Black"
-                           Keyboard="Telephone" />
-
-                    <!-- Email -->
                     <Entry x:Name="EmailEntry"
                            Placeholder="Email"
                            FontSize="16"
@@ -73,7 +47,6 @@
                            TextColor="Black"
                            Keyboard="Email" />
 
-                    <!-- Senha -->
                     <Entry x:Name="SenhaEntry"
                            Placeholder="Senha"
                            FontSize="16"
@@ -81,8 +54,7 @@
                            TextColor="Black"
                            IsPassword="True" />
 
-                    <!-- Botão de cadastro -->
-                    <Button Text="Cadastrar"
+                    <Button Text="Entrar"
                             WidthRequest="220"
                             HeightRequest="50"
                             FontSize="20"
@@ -90,17 +62,7 @@
                             BackgroundColor="#C9C8C8"
                             TextColor="Black"
                             CornerRadius="10"
-                            Clicked="CadastrarAgencia_Clicked" />
-
-                    <!-- Texto para Login -->
-                    <Label Text="Já tem uma conta? Entre agora"
-                           TextColor="Blue"
-                           HorizontalOptions="Center"
-                           FontSize="16">
-                        <Label.GestureRecognizers>
-                            <TapGestureRecognizer Tapped="IrParaLogin_Tapped" />
-                        </Label.GestureRecognizers>
-                    </Label>
+                            Clicked="Login_Clicked" />
 
                 </VerticalStackLayout>
             </Border>

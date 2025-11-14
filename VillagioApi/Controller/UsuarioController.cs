@@ -19,14 +19,24 @@ namespace VillagioApi.Controllers
         [HttpPost("cadastrar")]
         public async Task<IActionResult> Cadastrar([FromBody] Usuario usuario)
         {
-            if (usuario.TipoUsuarioId == 1) // Família
+            // Verifica duplicidade
+            bool existeUsuario = await _context.Usuarios.AnyAsync(u =>
+                (usuario.TipoUsuarioId == 1 && u.Telefone == usuario.Telefone) || // Família pelo telefone
+                (usuario.TipoUsuarioId == 2 && (u.Email == usuario.Email || u.CNPJ == usuario.CNPJ)) // Agência pelo email ou CNPJ
+            );
+
+            if (existeUsuario)
+                return BadRequest("Já existe um usuário cadastrado com esses dados.");
+
+            // Validações existentes...
+            if (usuario.TipoUsuarioId == 1)
             {
                 if (string.IsNullOrEmpty(usuario.Nome) || string.IsNullOrEmpty(usuario.Telefone) || string.IsNullOrEmpty(usuario.Senha))
                     return BadRequest("Família deve informar Nome, Telefone e Senha.");
                 usuario.CNPJ = null;
                 usuario.Email = null;
             }
-            else if (usuario.TipoUsuarioId == 2) // Agência
+            else if (usuario.TipoUsuarioId == 2)
             {
                 if (string.IsNullOrEmpty(usuario.Nome) || string.IsNullOrEmpty(usuario.Telefone) ||
                     string.IsNullOrEmpty(usuario.Senha) || string.IsNullOrEmpty(usuario.Email) || string.IsNullOrEmpty(usuario.CNPJ))

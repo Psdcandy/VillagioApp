@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Maui.Controls;
 
 namespace VillagioApp;
@@ -16,6 +15,7 @@ public partial class CadastroPage : ContentPage
         string telefone = TelefoneEntry.Text?.Trim() ?? "";
         string senha = SenhaEntry.Text ?? "";
 
+        // Validações
         if (string.IsNullOrWhiteSpace(nome))
         {
             await DisplayAlert("Erro", "Por favor, preencha o nome.", "OK");
@@ -24,7 +24,7 @@ public partial class CadastroPage : ContentPage
 
         if (string.IsNullOrWhiteSpace(telefone) || telefone.Length < 10)
         {
-            await DisplayAlert("Erro", "Telefone inválido.", "OK");
+            await DisplayAlert("Erro", "Telefone inválido. Use DDD + número.", "OK");
             return;
         }
 
@@ -33,6 +33,9 @@ public partial class CadastroPage : ContentPage
             await DisplayAlert("Erro", "A senha deve ter pelo menos 6 caracteres.", "OK");
             return;
         }
+
+        // Aqui você pode enviar os dados para a API
+        // Exemplo: await client.PostAsJsonAsync("usuarios", usuario);
 
         await DisplayAlert("Sucesso", "Cadastro realizado com sucesso!", "OK");
 

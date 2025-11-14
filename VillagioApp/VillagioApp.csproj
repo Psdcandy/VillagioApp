@@ -73,6 +73,9 @@
 	  <Compile Update="CadastroAgenciaPage.xaml.cs">
 	    <DependentUpon>CadastroAgenciaPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="LoginPage.xaml.cs">
+	    <DependentUpon>LoginPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="PagamentoPage.xaml.cs">
 	    <DependentUpon>PagamentoPage.xaml</DependentUpon>
 	  </Compile>
@@ -92,6 +95,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="MiniCalendarioPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="PagamentoPage.xaml">
