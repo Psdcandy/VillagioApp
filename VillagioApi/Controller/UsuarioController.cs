@@ -16,19 +16,18 @@ namespace VillagioApi.Controllers
             _context = context;
         }
 
+        // ✅ Cadastro
         [HttpPost("cadastrar")]
         public async Task<IActionResult> Cadastrar([FromBody] Usuario usuario)
         {
-            // Verifica duplicidade
             bool existeUsuario = await _context.Usuarios.AnyAsync(u =>
-                (usuario.TipoUsuarioId == 1 && u.Telefone == usuario.Telefone) || // Família pelo telefone
-                (usuario.TipoUsuarioId == 2 && (u.Email == usuario.Email || u.CNPJ == usuario.CNPJ)) // Agência pelo email ou CNPJ
+                (usuario.TipoUsuarioId == 1 && u.Telefone == usuario.Telefone) ||
+                (usuario.TipoUsuarioId == 2 && (u.Email == usuario.Email || u.CNPJ == usuario.CNPJ))
             );
 
             if (existeUsuario)
                 return BadRequest("Já existe um usuário cadastrado com esses dados.");
 
-            // Validações existentes...
             if (usuario.TipoUsuarioId == 1)
             {
                 if (string.IsNullOrEmpty(usuario.Nome) || string.IsNullOrEmpty(usuario.Telefone) || string.IsNullOrEmpty(usuario.Senha))
@@ -48,6 +47,52 @@ namespace VillagioApi.Controllers
             return Ok(usuario);
         }
 
+        // ✅ Login
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest login)
+        {
+            Usuario? usuario;
+
+            if (login.TipoUsuarioId == 1)
+            {
+                string telefoneLimpo = new string(login.Telefone.Where(char.IsDigit).ToArray());
+                string nomeLimpo = login.Nome.Trim().ToLower();
+                string senhaLimpa = login.Senha.Trim();
+
+                usuario = await _context.Usuarios.FirstOrDefaultAsync(u =>
+                    u.TipoUsuarioId == 1 &&
+                    u.Nome.Trim().ToLower() == nomeLimpo &&
+                    new string(u.Telefone.Where(char.IsDigit).ToArray()) == telefoneLimpo &&
+                    u.Senha.Trim() == senhaLimpa);
+            }
+            else
+            {
+                string emailLimpo = login.Email.Trim().ToLower();
+                string cnpjLimpo = new string(login.CNPJ.Where(char.IsDigit).ToArray());
+                string senhaLimpa = login.Senha.Trim();
+
+                usuario = await _context.Usuarios.FirstOrDefaultAsync(u =>
+                    u.TipoUsuarioId == 2 &&
+                    u.Email.Trim().ToLower() == emailLimpo &&
+                    new string(u.CNPJ.Where(char.IsDigit).ToArray()) == cnpjLimpo &&
+                    u.Senha.Trim() == senhaLimpa);
+            }
+
+            if (usuario == null)
+                return Unauthorized("Credenciais inválidas.");
+
+            var userResponse = new
+            {
+                usuario.Id,
+                usuario.Nome,
+                usuario.Email,
+                usuario.TipoUsuarioId
+            };
+
+            return Ok(userResponse);
+        }
+
+        // ✅ Listar todos
         [HttpGet("listar")]
         public async Task<IActionResult> Listar()
         {
@@ -55,6 +100,7 @@ namespace VillagioApi.Controllers
             return Ok(usuarios);
         }
 
+        // ✅ Buscar por ID
         [HttpGet("{id}")]
         public async Task<IActionResult> BuscarPorId(int id)
         {
@@ -64,6 +110,7 @@ namespace VillagioApi.Controllers
             return Ok(usuario);
         }
 
+        // ✅ Atualizar
         [HttpPut("{id}")]
         public async Task<IActionResult> Atualizar(int id, [FromBody] Usuario usuarioAtualizado)
         {
@@ -82,6 +129,7 @@ namespace VillagioApi.Controllers
             return Ok(usuario);
         }
 
+        // ✅ Excluir
         [HttpDelete("{id}")]
         public async Task<IActionResult> Excluir(int id)
         {

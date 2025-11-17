@@ -13,9 +13,15 @@
                 Aspect="AspectFit"
                 SemanticProperties.Description="Logo Villagio" />
 
+
             <!-- Border da Label -->
             <Border
-                Margin="20,50,20,0">
+                BackgroundColor="#F0F0F0"
+                Stroke="Black"
+                StrokeShape="RoundRectangle 10"
+                WidthRequest="250"
+                Padding="20"
+                Margin="20,10,20,0">
 
                 <Label Text="Cadastre-se"
                        FontSize="26"
@@ -35,53 +41,46 @@
                 Padding="20"
                 Margin="20,0,20,20">
 
-                <VerticalStackLayout Padding="30,0" Spacing="20"
-                                     VerticalOptions="Center">
 
-                    <!-- Nome -->
-                    <Entry x:Name="NomeEntry"
-                           Placeholder="Nome"
-                           WidthRequest="220"
-                           HeightRequest="40"
-                           FontSize="16"
-                           BackgroundColor="White"
-                           TextColor="Black" />
+                <VerticalStackLayout Padding="30,0" Spacing="20" VerticalOptions="Center">
 
-                    <!-- Telefone -->
-                    <Entry x:Name="TelefoneEntry"
-                           Placeholder="Telefone"
-                           WidthRequest="220"
-                           HeightRequest="40"
-                           FontSize="16"
-                           BackgroundColor="White"
-                           TextColor="Black"
+                <!-- Nome -->
+                <Entry x:Name="NomeEntry" Placeholder="Nome"
+                           WidthRequest="220" HeightRequest="40"
+                           FontSize="16" BackgroundColor="White" TextColor="Black" />
+
+                <!-- Telefone -->
+                <Entry x:Name="TelefoneEntry" Placeholder="Telefone"
+                           WidthRequest="220" HeightRequest="40"
+                           FontSize="16" BackgroundColor="White" TextColor="Black"
                            Keyboard="Telephone" />
 
-                    <!-- Senha -->
-                    <Entry x:Name="SenhaEntry"
-                           Placeholder="Senha"
-                           WidthRequest="220"
-                           HeightRequest="40"
-                           FontSize="16"
-                           BackgroundColor="White"
-                           TextColor="Black"
+                <!-- Senha -->
+                <Entry x:Name="SenhaEntry" Placeholder="Senha"
+                           WidthRequest="220" HeightRequest="40"
+                           FontSize="16" BackgroundColor="White" TextColor="Black"
                            IsPassword="True" />
 
-                    <!-- Botão de cadastro -->
-                    <Button Text="Cadastrar"
-                            WidthRequest="220"
-                            HeightRequest="50"
-                            FontSize="20"
-                            FontFamily="Sans3"
-                            BackgroundColor="#C9C8C8"
-                            TextColor="Black"
-                            BorderColor="Green"
-                            BorderWidth="2"
-                            CornerRadius="10"
+                <!-- Botão -->
+                <Button Text="Cadastrar"
+                            WidthRequest="220" HeightRequest="50"
+                            FontSize="20" FontFamily="Sans3"
+                            BackgroundColor="#C9C8C8" TextColor="Black"
+                            BorderColor="Green" BorderWidth="2" CornerRadius="10"
                             Clicked="Cadastrar_Clicked" />
 
+                    <Label Text="Já tem uma conta? Entre agora"
+                           TextColor="Blue"
+                           HorizontalOptions="Center"
+                           FontSize="16">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="IrParaLogin_Tapped" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                    
                 </VerticalStackLayout>
-            </Border>
+
+        </Border>
 
         </VerticalStackLayout>
     </ScrollView>

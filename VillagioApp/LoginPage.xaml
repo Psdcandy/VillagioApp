@@ -19,10 +19,11 @@
                 StrokeShape="RoundRectangle 10"
                 WidthRequest="250"
                 Padding="20"
-                Margin="20,10,20,0">
+                Margin="20,60,20,0">
 
                 <Label Text="Login"
-                       FontSize="26"
+                       FontSize="30"
+                       HorizontalTextAlignment="Center"
                        FontFamily="CanvasIn"
                        FontAttributes="Italic"
                        VerticalOptions="Center"
@@ -37,16 +38,45 @@
                 Padding="20"
                 Margin="20,0,20,20">
 
-                <VerticalStackLayout Padding="30,0" Spacing="20"
-                                     VerticalOptions="Center">
 
+                <VerticalStackLayout Padding="30,0" Spacing="20" VerticalOptions="Center">
+
+                    <!-- Nome (somente para Família) -->
+                    <Entry x:Name="NomeEntry"
+                           Placeholder="Nome"
+                           FontSize="16"
+                           BackgroundColor="White"
+                           TextColor="Black"
+                           IsVisible="False" />
+
+                    <!-- Telefone (somente para Família) -->
+                    <Entry x:Name="TelefoneEntry"
+                           Placeholder="Telefone"
+                           FontSize="16"
+                           BackgroundColor="White"
+                           TextColor="Black"
+                           Keyboard="Telephone"
+                           IsVisible="False" />
+
+                    <!-- Email (somente para Agência) -->
                     <Entry x:Name="EmailEntry"
                            Placeholder="Email"
                            FontSize="16"
                            BackgroundColor="White"
                            TextColor="Black"
-                           Keyboard="Email" />
+                           Keyboard="Email"
+                           IsVisible="False" />
 
+                    <!-- CNPJ (somente para Agência) -->
+                    <Entry x:Name="CnpjEntry"
+                           Placeholder="CNPJ"
+                           FontSize="16"
+                           BackgroundColor="White"
+                           TextColor="Black"
+                           Keyboard="Numeric"
+                           IsVisible="False" />
+
+                    <!-- Senha (comum para ambos) -->
                     <Entry x:Name="SenhaEntry"
                            Placeholder="Senha"
                            FontSize="16"
@@ -54,6 +84,7 @@
                            TextColor="Black"
                            IsPassword="True" />
 
+                    <!-- Botão -->
                     <Button Text="Entrar"
                             WidthRequest="220"
                             HeightRequest="50"
@@ -65,6 +96,7 @@
                             Clicked="Login_Clicked" />
 
                 </VerticalStackLayout>
+
             </Border>
 
         </VerticalStackLayout>

@@ -1,27 +1,32 @@
-using VillagioApi.Data;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Runtime.Intrinsics.X86;
+using System.Text;
+using VillagioApi.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Define a string de conex�o
+// String de conexão
 var strConn = builder.Environment.IsDevelopment()
     ? builder.Configuration.GetConnectionString("strConnExterna")
     : builder.Configuration.GetConnectionString("strConnExterna");
 
-// Registra o DBContext com a conex�o SQL Server
+
+// ✅ Configura DbContext
 builder.Services.AddDbContext<DBContext>(options =>
     options.UseSqlServer(strConn));
 
-// Adiciona Swagger
+// ✅ Adiciona Controllers
+builder.Services.AddControllers();
+
+// ✅ Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Adiciona controllers
-builder.Services.AddControllers();
-
 var app = builder.Build();
 
-// Middleware do Swagger
+// ✅ Middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -29,7 +34,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthorization();
+
+// ✅ Sem autenticação, apenas rotas abertas
 app.MapControllers();
 
 app.Run();

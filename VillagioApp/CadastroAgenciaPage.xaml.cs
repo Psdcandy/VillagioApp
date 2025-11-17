@@ -119,6 +119,6 @@ public partial class CadastroAgenciaPage : ContentPage
 
     private async void IrParaLogin_Tapped(object sender, EventArgs e)
     {
-        await Navigation.PushAsync(new LoginPage());
+        await Navigation.PushAsync(new LoginPage("Agencia"));
     }
 }
