@@ -1,8 +1,7 @@
-﻿using Microsoft.Maui.ApplicationModel.Communication;
-using Microsoft.Maui.Controls;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using System.Text.Json;
-using VillagioApp.Resources.Models;
+
+
 
 namespace VillagioApp;
 
@@ -37,14 +36,21 @@ public partial class LoginPage : ContentPage
 
         HttpResponseMessage response;
 
+        // Cria o DTO
+        var loginDto = new LoginRequest
+        {
+            TipoUsuarioId = tipoUsuario == "Familia" ? 1 : 2,
+            Senha = SenhaEntry.Text?.Trim() ?? ""
+        };
+
         if (tipoUsuario == "Familia")
         {
             string nome = NomeEntry.Text?.Trim() ?? "";
             string telefone = TelefoneEntry.Text?.Trim() ?? "";
-            string senha = SenhaEntry.Text ?? "";
 
             telefone = new string(telefone.Where(char.IsDigit).ToArray());
 
+            // ✅ Validações
             if (string.IsNullOrWhiteSpace(nome))
             {
                 await DisplayAlert("Erro", "Por favor, preencha o nome.", "OK");
@@ -57,30 +63,23 @@ public partial class LoginPage : ContentPage
                 return;
             }
 
-            if (senha.Length < 6)
+            if (loginDto.Senha.Length < 6)
             {
                 await DisplayAlert("Erro", "A senha deve ter pelo menos 6 caracteres.", "OK");
                 return;
             }
 
-            var loginDto = new
-            {
-                TipoUsuarioId = 1,
-                Nome = nome,
-                Telefone = telefone,
-                Senha = senha
-            };
-
-            response = await client.PostAsJsonAsync("api/Usuario/login", loginDto);
+            loginDto.Nome = nome;
+            loginDto.Telefone = telefone;
         }
-        else // Agencia
+        else // Agência
         {
             string email = EmailEntry.Text?.Trim() ?? "";
             string cnpj = CnpjEntry.Text?.Trim() ?? "";
-            string senha = SenhaEntry.Text ?? "";
 
             cnpj = new string(cnpj.Where(char.IsDigit).ToArray());
 
+            // ✅ Validações
             if (string.IsNullOrWhiteSpace(email) || !System.Text.RegularExpressions.Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
                 await DisplayAlert("Erro", "Email inválido. Exemplo: contato@empresa.com", "OK");
@@ -93,28 +92,37 @@ public partial class LoginPage : ContentPage
                 return;
             }
 
-            if (senha.Length < 6)
+            if (loginDto.Senha.Length < 6)
             {
                 await DisplayAlert("Erro", "A senha deve ter pelo menos 6 caracteres.", "OK");
                 return;
             }
 
-            var loginDto = new
-            {
-                TipoUsuarioId = 2,
-                Email = email,
-                CNPJ = cnpj,
-                Senha = senha
-            };
-
-            var options = new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = null // mantém o nome original
-            };
-
-            response = await client.PostAsJsonAsync("api/Usuario/login", loginDto, options);
-
+            loginDto.Email = email;
+            loginDto.CNPJ = cnpj;
         }
+
+        // ✅ Mantém PascalCase no JSON
+        var options = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = null
+        };
+
+        response = await client.PostAsJsonAsync("api/Usuario/login", loginDto, options);
+
+        // ✅ Verifica resposta
+        if (response.IsSuccessStatusCode)
+        {
+            await DisplayAlert("Sucesso", "Login realizado com sucesso!", "OK");
+            await Navigation.PushAsync(new CalendarioPage());
+        }
+        else
+        {
+            string errorMsg = await response.Content.ReadAsStringAsync();
+            await DisplayAlert("Erro", $"Falha no login: {errorMsg}", "OK");
+        }
+    
+
 
         // ✅ Verifica se o login foi bem-sucedido
         if (response.IsSuccessStatusCode)
