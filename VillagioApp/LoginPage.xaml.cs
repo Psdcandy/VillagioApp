@@ -1,6 +1,7 @@
 ﻿using Microsoft.Maui.ApplicationModel.Communication;
 using Microsoft.Maui.Controls;
 using System.Net.Http.Json;
+using System.Text.Json;
 using VillagioApp.Resources.Models;
 
 namespace VillagioApp;
@@ -106,7 +107,13 @@ public partial class LoginPage : ContentPage
                 Senha = senha
             };
 
-            response = await client.PostAsJsonAsync("api/Usuario/login", loginDto);
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = null // mantém o nome original
+            };
+
+            response = await client.PostAsJsonAsync("api/Usuario/login", loginDto, options);
+
         }
 
         // ✅ Verifica se o login foi bem-sucedido

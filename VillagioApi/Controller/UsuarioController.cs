@@ -59,11 +59,14 @@ namespace VillagioApi.Controllers
                 string nomeLimpo = login.Nome.Trim().ToLower();
                 string senhaLimpa = login.Senha.Trim();
 
-                usuario = await _context.Usuarios.FirstOrDefaultAsync(u =>
-                    u.TipoUsuarioId == 1 &&
-                    u.Nome.Trim().ToLower() == nomeLimpo &&
+                var usuarios = await _context.Usuarios
+                    .Where(u => u.TipoUsuarioId == 1 && u.Senha.Trim() == senhaLimpa)
+                    .ToListAsync();
+
+                usuario = usuarios.FirstOrDefault(u =>
                     new string(u.Telefone.Where(char.IsDigit).ToArray()) == telefoneLimpo &&
-                    u.Senha.Trim() == senhaLimpa);
+                    u.Nome.Trim().ToLower() == nomeLimpo);
+
             }
             else
             {
@@ -71,8 +74,11 @@ namespace VillagioApi.Controllers
                 string cnpjLimpo = new string(login.CNPJ.Where(char.IsDigit).ToArray());
                 string senhaLimpa = login.Senha.Trim();
 
-                usuario = await _context.Usuarios.FirstOrDefaultAsync(u =>
-                    u.TipoUsuarioId == 2 &&
+                var usuariosAgencia = await _context.Usuarios
+                    .Where(u => u.TipoUsuarioId == 2)
+                    .ToListAsync();
+
+                usuario = usuariosAgencia.FirstOrDefault(u =>
                     u.Email.Trim().ToLower() == emailLimpo &&
                     new string(u.CNPJ.Where(char.IsDigit).ToArray()) == cnpjLimpo &&
                     u.Senha.Trim() == senhaLimpa);
