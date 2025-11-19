@@ -1,8 +1,6 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json;
 
-
-
 namespace VillagioApp;
 
 public partial class LoginPage : ContentPage
@@ -14,43 +12,35 @@ public partial class LoginPage : ContentPage
         InitializeComponent();
         tipoUsuario = tipo;
 
-        if (tipoUsuario == "Familia")
-        {
-            NomeEntry.IsVisible = true;
-            TelefoneEntry.IsVisible = true;
-            EmailEntry.IsVisible = false;
-            CnpjEntry.IsVisible = false;
-        }
-        else if (tipoUsuario == "Agencia")
-        {
-            NomeEntry.IsVisible = false;
-            TelefoneEntry.IsVisible = false;
-            EmailEntry.IsVisible = true;
-            CnpjEntry.IsVisible = true;
-        }
+        // Ajusta visibilidade dos campos
+        NomeEntry.IsVisible = tipoUsuario == "Familia";
+        TelefoneEntry.IsVisible = tipoUsuario == "Familia";
+        EmailEntry.IsVisible = tipoUsuario == "Agencia";
+        CnpjEntry.IsVisible = tipoUsuario == "Agencia";
     }
 
     private async void Login_Clicked(object sender, EventArgs e)
     {
         using var client = new HttpClient { BaseAddress = new Uri("http://villagioapi.runasp.net/") };
 
-        HttpResponseMessage response;
-
-        // Cria o DTO
+        // Cria DTO com valores padrão
         var loginDto = new LoginRequest
         {
             TipoUsuarioId = tipoUsuario == "Familia" ? 1 : 2,
-            Senha = SenhaEntry.Text?.Trim() ?? ""
+            Senha = SenhaEntry.Text?.Trim() ?? "",
+            Nome = "",
+            Telefone = "",
+            Email = "",
+            CNPJ = ""
         };
 
+        // Validações e preenchimento
         if (tipoUsuario == "Familia")
         {
             string nome = NomeEntry.Text?.Trim() ?? "";
             string telefone = TelefoneEntry.Text?.Trim() ?? "";
-
             telefone = new string(telefone.Where(char.IsDigit).ToArray());
 
-            // ✅ Validações
             if (string.IsNullOrWhiteSpace(nome))
             {
                 await DisplayAlert("Erro", "Por favor, preencha o nome.", "OK");
@@ -76,10 +66,8 @@ public partial class LoginPage : ContentPage
         {
             string email = EmailEntry.Text?.Trim() ?? "";
             string cnpj = CnpjEntry.Text?.Trim() ?? "";
-
             cnpj = new string(cnpj.Where(char.IsDigit).ToArray());
 
-            // ✅ Validações
             if (string.IsNullOrWhiteSpace(email) || !System.Text.RegularExpressions.Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
             {
                 await DisplayAlert("Erro", "Email inválido. Exemplo: contato@empresa.com", "OK");
@@ -100,36 +88,27 @@ public partial class LoginPage : ContentPage
 
             loginDto.Email = email;
             loginDto.CNPJ = cnpj;
+            loginDto.Nome = "";
+            loginDto.Telefone = "";
         }
 
-        // ✅ Mantém PascalCase no JSON
+        // Configura serialização para camelCase (compatível com API)
         var options = new JsonSerializerOptions
         {
-            PropertyNamingPolicy = null
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
-        response = await client.PostAsJsonAsync("api/Usuario/login", loginDto, options);
+        // Debug: imprime JSON antes de enviar
+        string jsonDebug = JsonSerializer.Serialize(loginDto, options);
+        Console.WriteLine($"JSON enviado: {jsonDebug}");
 
-        // ✅ Verifica resposta
+        // Envia requisição
+        HttpResponseMessage response = await client.PostAsJsonAsync("api/Usuario/login", loginDto, options);
+
+        // Trata resposta
         if (response.IsSuccessStatusCode)
         {
             await DisplayAlert("Sucesso", "Login realizado com sucesso!", "OK");
-            await Navigation.PushAsync(new CalendarioPage());
-        }
-        else
-        {
-            string errorMsg = await response.Content.ReadAsStringAsync();
-            await DisplayAlert("Erro", $"Falha no login: {errorMsg}", "OK");
-        }
-    
-
-
-        // ✅ Verifica se o login foi bem-sucedido
-        if (response.IsSuccessStatusCode)
-        {
-            await DisplayAlert("Sucesso", "Login realizado com sucesso!", "OK");
-
-            // ✅ Navega para CalendarioPage
             await Navigation.PushAsync(new CalendarioPage());
         }
         else

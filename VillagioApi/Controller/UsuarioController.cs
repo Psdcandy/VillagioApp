@@ -47,56 +47,70 @@ namespace VillagioApi.Controllers
             return Ok(usuario);
         }
 
-        // ✅ Login
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest login)
+        public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
-            Usuario? usuario;
-
-            if (login.TipoUsuarioId == 1)
+            try
             {
-                string telefoneLimpo = new string(login.Telefone.Where(char.IsDigit).ToArray());
-                string nomeLimpo = login.Nome.Trim().ToLower();
-                string senhaLimpa = login.Senha.Trim();
+                if (request == null)
+                    return BadRequest("Dados inválidos.");
 
-                var usuarios = await _context.Usuarios
-                    .Where(u => u.TipoUsuarioId == 1 && u.Senha.Trim() == senhaLimpa)
-                    .ToListAsync();
+                Usuario? usuario = null;
 
-                usuario = usuarios.FirstOrDefault(u =>
-                    new string(u.Telefone.Where(char.IsDigit).ToArray()) == telefoneLimpo &&
-                    u.Nome.Trim().ToLower() == nomeLimpo);
+                if (request.TipoUsuarioId == 1)
+                {
+                    string telefoneLimpo = new string((request.Telefone ?? "").Where(char.IsDigit).ToArray());
+                    string nomeLimpo = (request.Nome ?? "").Trim().ToLower();
+                    string senhaLimpa = (request.Senha ?? "").Trim();
 
+                    var usuarios = await _context.Usuarios
+                        .Where(u => u.TipoUsuarioId == 1 && u.Senha.Trim() == senhaLimpa)
+                        .ToListAsync();
+
+                    usuario = usuarios.FirstOrDefault(u =>
+                        new string((u.Telefone ?? "").Where(char.IsDigit).ToArray()) == telefoneLimpo &&
+                        (u.Nome ?? "").Trim().ToLower() == nomeLimpo);
+                }
+                else if (request.TipoUsuarioId == 2)
+                {
+                    string emailLimpo = (request.Email ?? "").Trim().ToLower();
+                    string cnpjLimpo = new string((request.CNPJ ?? "").Where(char.IsDigit).ToArray());
+                    string senhaLimpa = (request.Senha ?? "").Trim();
+
+                    var usuariosAgencia = await _context.Usuarios
+                        .Where(u => u.TipoUsuarioId == 2)
+                        .ToListAsync();
+
+                    usuario = usuariosAgencia.FirstOrDefault(u =>
+                        (u.Email ?? "").Trim().ToLower() == emailLimpo &&
+                        new string((u.CNPJ ?? "").Where(char.IsDigit).ToArray()) == cnpjLimpo &&
+                        u.Senha.Trim() == senhaLimpa);
+                }
+                else
+                {
+                    return BadRequest("Tipo de usuário inválido.");
+                }
+
+                if (usuario == null)
+                    return Unauthorized("Credenciais inválidas.");
+
+                var userResponse = new
+                {
+                    usuario.Id,
+                    usuario.Nome,
+                    usuario.Email,
+                    usuario.TipoUsuarioId
+                };
+
+                return Ok(userResponse);
             }
-            else
+            catch (Exception ex)
             {
-                string emailLimpo = login.Email.Trim().ToLower();
-                string cnpjLimpo = new string(login.CNPJ.Where(char.IsDigit).ToArray());
-                string senhaLimpa = login.Senha.Trim();
-
-                var usuariosAgencia = await _context.Usuarios
-                    .Where(u => u.TipoUsuarioId == 2)
-                    .ToListAsync();
-
-                usuario = usuariosAgencia.FirstOrDefault(u =>
-                    u.Email.Trim().ToLower() == emailLimpo &&
-                    new string(u.CNPJ.Where(char.IsDigit).ToArray()) == cnpjLimpo &&
-                    u.Senha.Trim() == senhaLimpa);
+                // Captura qualquer erro interno e retorna detalhes
+                return StatusCode(500, $"Erro interno no servidor: {ex.Message}");
             }
-
-            if (usuario == null)
-                return Unauthorized("Credenciais inválidas.");
-
-            var userResponse = new
-            {
-                usuario.Id,
-                usuario.Nome,
-                usuario.Email,
-                usuario.TipoUsuarioId
-            };
-
-            return Ok(userResponse);
         }
+
 
         // ✅ Listar todos
         [HttpGet("listar")]
