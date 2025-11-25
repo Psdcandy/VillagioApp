@@ -1,13 +1,15 @@
-﻿using VillagioApi.Model;
-
-public class Usuario
+﻿namespace VillagioApi.Model
 {
-    public int Id { get; set; }
-    public string? Nome { get; set; }       // Agora opcional
-    public string? Telefone { get; set; }   // Agora opcional
-    public string? Email { get; set; }
-    public string? CNPJ { get; set; }
-    public string Senha { get; set; } = ""; // Pode manter obrigatório com valor padrão
-    public int TipoUsuarioId { get; set; }
-    public TipoUsuario? TipoUsuario { get; set; }
+    public class Usuario
+    {
+        public int Id { get; set; }
+        public string Nome { get; set; } = ""; // Obrigatório para ambos
+        public string Telefone { get; set; } = ""; // Obrigatório para ambos
+        public string? Email { get; set; } // Não usado mais para login, mas mantido para compatibilidade
+        public string? CNPJ { get; set; } // Obrigatório para Agência
+        public string Senha { get; set; } = ""; // Sempre obrigatório
+        public int TipoUsuarioId { get; set; } // 1 = Família, 2 = Agência
+
+        public TipoUsuario? TipoUsuario { get; set; }
+    }
 }

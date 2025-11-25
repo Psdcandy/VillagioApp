@@ -41,31 +41,20 @@
 
                 <VerticalStackLayout Padding="30,0" Spacing="20" VerticalOptions="Center">
 
-                    <!-- Nome (somente para Família) -->
+                    <!-- Nome (para ambos) -->
                     <Entry x:Name="NomeEntry"
                            Placeholder="Nome"
                            FontSize="16"
                            BackgroundColor="White"
-                           TextColor="Black"
-                           IsVisible="False" />
+                           TextColor="Black" />
 
-                    <!-- Telefone (somente para Família) -->
+                    <!-- Telefone (para ambos) -->
                     <Entry x:Name="TelefoneEntry"
                            Placeholder="Telefone"
                            FontSize="16"
                            BackgroundColor="White"
                            TextColor="Black"
-                           Keyboard="Telephone"
-                           IsVisible="False" />
-
-                    <!-- Email (somente para Agência) -->
-                    <Entry x:Name="EmailEntry"
-                           Placeholder="Email"
-                           FontSize="16"
-                           BackgroundColor="White"
-                           TextColor="Black"
-                           Keyboard="Email"
-                           IsVisible="False" />
+                           Keyboard="Telephone" />
 
                     <!-- CNPJ (somente para Agência) -->
                     <Entry x:Name="CnpjEntry"

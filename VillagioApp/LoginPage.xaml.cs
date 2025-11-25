@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿
+using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace VillagioApp;
@@ -13,10 +14,9 @@ public partial class LoginPage : ContentPage
         tipoUsuario = tipo;
 
         // Ajusta visibilidade dos campos
-        NomeEntry.IsVisible = tipoUsuario == "Familia";
-        TelefoneEntry.IsVisible = tipoUsuario == "Familia";
-        EmailEntry.IsVisible = tipoUsuario == "Agencia";
-        CnpjEntry.IsVisible = tipoUsuario == "Agencia";
+        NomeEntry.IsVisible = true; // Agora sempre visível
+        TelefoneEntry.IsVisible = true; // Agora sempre visível
+        CnpjEntry.IsVisible = tipoUsuario == "Agencia"; // Apenas para Agência
     }
 
     private async void Login_Clicked(object sender, EventArgs e)
@@ -30,49 +30,40 @@ public partial class LoginPage : ContentPage
             Senha = SenhaEntry.Text?.Trim() ?? "",
             Nome = "",
             Telefone = "",
-            Email = "",
+            Email = "", // Mantido no DTO, mas não usado
             CNPJ = ""
         };
 
         // Validações e preenchimento
-        if (tipoUsuario == "Familia")
+        string nome = NomeEntry.Text?.Trim() ?? "";
+        string telefone = TelefoneEntry.Text?.Trim() ?? "";
+        telefone = new string(telefone.Where(char.IsDigit).ToArray());
+
+        if (string.IsNullOrWhiteSpace(nome))
         {
-            string nome = NomeEntry.Text?.Trim() ?? "";
-            string telefone = TelefoneEntry.Text?.Trim() ?? "";
-            telefone = new string(telefone.Where(char.IsDigit).ToArray());
-
-            if (string.IsNullOrWhiteSpace(nome))
-            {
-                await DisplayAlert("Erro", "Por favor, preencha o nome.", "OK");
-                return;
-            }
-
-            if (telefone.Length < 10 || telefone.Length > 11)
-            {
-                await DisplayAlert("Erro", "Telefone inválido. Use DDD + número.", "OK");
-                return;
-            }
-
-            if (loginDto.Senha.Length < 6)
-            {
-                await DisplayAlert("Erro", "A senha deve ter pelo menos 6 caracteres.", "OK");
-                return;
-            }
-
-            loginDto.Nome = nome;
-            loginDto.Telefone = telefone;
+            await DisplayAlert("Erro", "Por favor, preencha o nome.", "OK");
+            return;
         }
-        else // Agência
+
+        if (telefone.Length < 10 || telefone.Length > 11)
         {
-            string email = EmailEntry.Text?.Trim() ?? "";
+            await DisplayAlert("Erro", "Telefone inválido. Use DDD + número.", "OK");
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(loginDto.Senha) || loginDto.Senha.Length < 6)
+        {
+            await DisplayAlert("Erro", "A senha deve ter pelo menos 6 caracteres.", "OK");
+            return;
+        }
+
+        loginDto.Nome = nome;
+        loginDto.Telefone = telefone;
+
+        if (tipoUsuario == "Agencia")
+        {
             string cnpj = CnpjEntry.Text?.Trim() ?? "";
             cnpj = new string(cnpj.Where(char.IsDigit).ToArray());
-
-            if (string.IsNullOrWhiteSpace(email) || !System.Text.RegularExpressions.Regex.IsMatch(email, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
-            {
-                await DisplayAlert("Erro", "Email inválido. Exemplo: contato@empresa.com", "OK");
-                return;
-            }
 
             if (string.IsNullOrWhiteSpace(cnpj) || cnpj.Length != 14)
             {
@@ -80,16 +71,7 @@ public partial class LoginPage : ContentPage
                 return;
             }
 
-            if (loginDto.Senha.Length < 6)
-            {
-                await DisplayAlert("Erro", "A senha deve ter pelo menos 6 caracteres.", "OK");
-                return;
-            }
-
-            loginDto.Email = email;
             loginDto.CNPJ = cnpj;
-            loginDto.Nome = "";
-            loginDto.Telefone = "";
         }
 
         // Configura serialização para camelCase (compatível com API)
