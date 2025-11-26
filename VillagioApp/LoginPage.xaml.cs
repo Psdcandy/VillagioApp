@@ -1,6 +1,8 @@
 ﻿
 using System.Net.Http.Json;
 using System.Text.Json;
+using System.Globalization;
+using System.Text;
 
 namespace VillagioApp;
 
@@ -13,31 +15,53 @@ public partial class LoginPage : ContentPage
         InitializeComponent();
         tipoUsuario = tipo;
 
-        // Ajusta visibilidade dos campos
-        NomeEntry.IsVisible = true; // Agora sempre visível
-        TelefoneEntry.IsVisible = true; // Agora sempre visível
-        CnpjEntry.IsVisible = tipoUsuario == "Agencia"; // Apenas para Agência
+        NomeEntry.IsVisible = true;
+        TelefoneEntry.IsVisible = true;
+        CnpjEntry.IsVisible = tipoUsuario == "Agencia";
     }
+
+    // Funções utilitárias para normalização
+    private static string NormalizeText(string? input)
+    {
+        if (string.IsNullOrWhiteSpace(input)) return string.Empty;
+
+        var normalized = input.Trim().Normalize(NormalizationForm.FormD);
+        var sb = new StringBuilder(normalized.Length);
+
+        foreach (var ch in normalized)
+        {
+            var uc = CharUnicodeInfo.GetUnicodeCategory(ch);
+            if (uc != UnicodeCategory.NonSpacingMark &&
+                uc != UnicodeCategory.SpacingCombiningMark &&
+                uc != UnicodeCategory.EnclosingMark)
+            {
+                sb.Append(char.ToLowerInvariant(ch));
+            }
+        }
+
+        return sb.ToString().Normalize(NormalizationForm.FormC);
+    }
+
+    private static string DigitsOnly(string? s) =>
+        new string((s ?? string.Empty).Where(char.IsDigit).ToArray());
 
     private async void Login_Clicked(object sender, EventArgs e)
     {
         using var client = new HttpClient { BaseAddress = new Uri("http://villagioapi.runasp.net/") };
 
-        // Cria DTO com valores padrão
         var loginDto = new LoginRequest
         {
             TipoUsuarioId = tipoUsuario == "Familia" ? 1 : 2,
             Senha = SenhaEntry.Text?.Trim() ?? "",
             Nome = "",
             Telefone = "",
-            Email = "", // Mantido no DTO, mas não usado
+            Email = "",
             CNPJ = ""
         };
 
-        // Validações e preenchimento
-        string nome = NomeEntry.Text?.Trim() ?? "";
-        string telefone = TelefoneEntry.Text?.Trim() ?? "";
-        telefone = new string(telefone.Where(char.IsDigit).ToArray());
+        // Normaliza e valida campos
+        string nome = NormalizeText(NomeEntry.Text);
+        string telefone = DigitsOnly(TelefoneEntry.Text);
 
         if (string.IsNullOrWhiteSpace(nome))
         {
@@ -62,8 +86,7 @@ public partial class LoginPage : ContentPage
 
         if (tipoUsuario == "Agencia")
         {
-            string cnpj = CnpjEntry.Text?.Trim() ?? "";
-            cnpj = new string(cnpj.Where(char.IsDigit).ToArray());
+            string cnpj = DigitsOnly(CnpjEntry.Text);
 
             if (string.IsNullOrWhiteSpace(cnpj) || cnpj.Length != 14)
             {
@@ -74,20 +97,17 @@ public partial class LoginPage : ContentPage
             loginDto.CNPJ = cnpj;
         }
 
-        // Configura serialização para camelCase (compatível com API)
         var options = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
 
-        // Debug: imprime JSON antes de enviar
+        // Debug: imprime JSON normalizado
         string jsonDebug = JsonSerializer.Serialize(loginDto, options);
         Console.WriteLine($"JSON enviado: {jsonDebug}");
 
-        // Envia requisição
         HttpResponseMessage response = await client.PostAsJsonAsync("api/Usuario/login", loginDto, options);
 
-        // Trata resposta
         if (response.IsSuccessStatusCode)
         {
             await DisplayAlert("Sucesso", "Login realizado com sucesso!", "OK");
@@ -96,7 +116,8 @@ public partial class LoginPage : ContentPage
         else
         {
             string errorMsg = await response.Content.ReadAsStringAsync();
-            await DisplayAlert("Erro", $"Falha no login: {errorMsg}", "OK");
+            Console.WriteLine($"Erro: {response.StatusCode} - {errorMsg}");
+            await DisplayAlert("Erro", "Falha no login. Verifique seus dados e tente novamente.", "OK");
         }
     }
 }

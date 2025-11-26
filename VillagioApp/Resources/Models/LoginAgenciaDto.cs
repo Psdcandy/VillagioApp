@@ -1,6 +1,12 @@
-﻿public class LoginAgenciaDto
+﻿
+namespace VillagioApi.Model
 {
-    public string Email { get; set; } = string.Empty;
-    public string Senha { get; set; } = string.Empty;
-    public string CNPJ { get; set; } = string.Empty;
+    public class LoginAgenciaDto
+    {
+        public int TipoUsuarioId { get; set; } = 2;
+        public string Nome { get; set; } = "";
+        public string Telefone { get; set; } = "";
+        public string CNPJ { get; set; } = "";
+        public string Senha { get; set; } = "";
+    }
 }

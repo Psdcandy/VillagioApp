@@ -77,92 +77,81 @@ namespace VillagioApi.Controllers
         }
 
 
+
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginRequest dto)
         {
             try
             {
-                if (request == null)
-                    return BadRequest("Dados inválidos.");
+                // Validação do corpo
+                if (dto == null)
+                    return BadRequest(new ProblemDetails { Title = "Requisição inválida", Detail = "Corpo da requisição está vazio." });
 
-                // Log inicial
-                Console.WriteLine($"[LOGIN] TipoUsuarioId={request.TipoUsuarioId}, Nome='{request.Nome}', Telefone='{request.Telefone}', CNPJ='{request.CNPJ}', Senha='{request.Senha}'");
+                if (dto.TipoUsuarioId != 1 && dto.TipoUsuarioId != 2)
+                    return BadRequest(new ProblemDetails { Title = "Tipo inválido", Detail = "TipoUsuarioId deve ser 1 (Família) ou 2 (Agência)." });
 
-                Usuario? usuario = null;
+                if (string.IsNullOrWhiteSpace(dto.Nome))
+                    return BadRequest(new ProblemDetails { Title = "Nome obrigatório", Detail = "Informe o nome." });
 
-                // Funções auxiliares
-                string Normalize(string? text)
+                if (string.IsNullOrWhiteSpace(dto.Telefone) || dto.Telefone.Length < 10)
+                    return BadRequest(new ProblemDetails { Title = "Telefone inválido", Detail = "Informe DDD + número (10 ou 11 dígitos)." });
+
+                if (string.IsNullOrWhiteSpace(dto.Senha) || dto.Senha.Length < 6)
+                    return BadRequest(new ProblemDetails { Title = "Senha inválida", Detail = "A senha deve ter pelo menos 6 caracteres." });
+
+                if (dto.TipoUsuarioId == 2) // Agência
                 {
-                    if (string.IsNullOrWhiteSpace(text)) return string.Empty;
-                    var normalized = text.Normalize(NormalizationForm.FormD);
-                    var sb = new StringBuilder();
-                    foreach (var ch in normalized)
-                    {
-                        var uc = CharUnicodeInfo.GetUnicodeCategory(ch);
-                        if (uc != UnicodeCategory.NonSpacingMark)
-                            sb.Append(char.ToLowerInvariant(ch));
-                    }
-                    return sb.ToString();
+                    if (string.IsNullOrWhiteSpace(dto.CNPJ) || dto.CNPJ.Length != 14)
+                        return BadRequest(new ProblemDetails { Title = "CNPJ inválido", Detail = "Informe apenas números (14 dígitos)." });
                 }
 
-                string DigitsOnly(string? s) => new string((s ?? "").Where(char.IsDigit).ToArray());
+                // Normaliza valores para evitar NullReference
+                var nome = dto.Nome.Trim();
+                var telefone = dto.Telefone.Trim();
+                var senha = dto.Senha.Trim();
+                var cnpj = dto.CNPJ?.Trim() ?? "";
+                var email = dto.Email?.Trim() ?? "";
 
-                if (request.TipoUsuarioId == 1) // Família
+                // Consulta no banco (exemplo com Dapper ou EF Core)
+                Usuario usuario = null;
+
+                if (dto.TipoUsuarioId == 1) // Família
                 {
-                    string nomeReq = Normalize(request.Nome);
-                    string telReq = DigitsOnly(request.Telefone);
-                    string senhaReq = (request.Senha ?? "").Trim();
-
-                    var usuarios = await _context.Usuarios
-                        .Where(u => u.TipoUsuarioId == 1 && (u.Senha ?? "").Trim() == senhaReq)
-                        .ToListAsync();
-
-                    usuario = usuarios.FirstOrDefault(u =>
-                        DigitsOnly(u.Telefone) == telReq &&
-                        Normalize(u.Nome) == nomeReq);
+                    usuario = await _context.Usuarios
+                        .FirstOrDefaultAsync(u => u.Nome == nome && u.Telefone == telefone && u.Senha == senha && u.TipoUsuarioId == 1);
                 }
-                else if (request.TipoUsuarioId == 2) // Agência
+                else // Agência
                 {
-                    string nomeReq = Normalize(request.Nome);
-                    string telReq = DigitsOnly(request.Telefone);
-                    string cnpjReq = DigitsOnly(request.CNPJ);
-                    string senhaReq = (request.Senha ?? "").Trim();
-
-                    var usuariosAgencia = await _context.Usuarios
-                        .Where(u => u.TipoUsuarioId == 2)
-                        .ToListAsync();
-
-                    usuario = usuariosAgencia.FirstOrDefault(u =>
-                        Normalize(u.Nome) == nomeReq &&
-                        DigitsOnly(u.Telefone) == telReq &&
-                        DigitsOnly(u.CNPJ) == cnpjReq &&
-                        (u.Senha ?? "").Trim() == senhaReq);
-                }
-                else
-                {
-                    return BadRequest("Tipo de usuário inválido.");
+                    usuario = await _context.Usuarios
+                        .FirstOrDefaultAsync(u => u.Nome == nome && u.CNPJ == cnpj && u.Senha == senha && u.TipoUsuarioId == 2);
                 }
 
                 if (usuario == null)
-                {
-                    Console.WriteLine($"[LOGIN] Nenhum usuário encontrado. Nome(normalizado)='{Normalize(request.Nome)}', Telefone='{DigitsOnly(request.Telefone)}', CNPJ='{DigitsOnly(request.CNPJ)}'");
-                    return Unauthorized("Credenciais inválidas.");
-                }
+                    return Unauthorized(new ProblemDetails { Title = "Credenciais inválidas", Detail = "Usuário não encontrado ou senha incorreta." });
 
-                var userResponse = new
+                // Retorna sucesso
+                return Ok(new
                 {
-                    usuario.Id,
-                    usuario.Nome,
-                    usuario.TipoUsuarioId
-                };
-
-                return Ok(userResponse);
+                    message = "Login realizado com sucesso",
+                    usuarioId = usuario.Id,
+                    nome = usuario.Nome,
+                    tipo = usuario.TipoUsuarioId
+                });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Erro interno no servidor: {ex.Message}");
+
+
+                // Retorna erro interno com detalhes amigáveis
+                return StatusCode(500, new ProblemDetails
+                {
+                    Title = "Erro interno",
+                    Detail = "Ocorreu um erro inesperado. Tente novamente mais tarde.",
+                    Status = 500
+                });
             }
         }
+
 
 
         // ✅ Listar todos
