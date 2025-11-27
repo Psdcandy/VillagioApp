@@ -1,8 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Globalization;
-using System.Text;
 using VillagioApi.Data;
 using VillagioApi.Model;
 
@@ -18,33 +16,6 @@ namespace VillagioApi.Controllers
         {
             _context = context;
         }
-
-        // ✅ Funções utilitárias para normalização
-        private static string NormalizeText(string? input)
-        {
-            if (string.IsNullOrWhiteSpace(input)) return string.Empty;
-
-            var normalized = input.Trim().Normalize(NormalizationForm.FormD);
-            var sb = new StringBuilder(normalized.Length);
-
-            foreach (var ch in normalized)
-            {
-                var uc = CharUnicodeInfo.GetUnicodeCategory(ch);
-                if (uc != UnicodeCategory.NonSpacingMark &&
-                    uc != UnicodeCategory.SpacingCombiningMark &&
-                    uc != UnicodeCategory.EnclosingMark)
-                {
-                    sb.Append(char.ToLowerInvariant(ch));
-                }
-            }
-
-            return sb.ToString().Normalize(NormalizationForm.FormC);
-        }
-
-        private static string DigitsOnly(string? s) =>
-            new string((s ?? string.Empty).Where(char.IsDigit).ToArray());
-
-        // ✅ Cadastro
         [HttpPost("cadastrar")]
         public async Task<IActionResult> Cadastrar([FromBody] Usuario usuario)
         {

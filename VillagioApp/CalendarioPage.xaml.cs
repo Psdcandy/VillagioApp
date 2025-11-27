@@ -1,5 +1,4 @@
-using Microsoft.Maui.Controls;
-using System.Collections.ObjectModel;
+﻿using Microsoft.Maui.Controls;
 using System.Globalization;
 using VillagioApp.Resources.Model;
 
@@ -7,10 +6,14 @@ namespace VillagioApp;
 
 public partial class CalendarioPage : ContentPage
 {
-    public CalendarioPage()
+    public readonly int _tipoUsuarioId; // 1 = Família, 2 = Agência
+
+    // 🔹 Construtor atualizado para receber o tipo do usuário
+    public CalendarioPage(int tipoUsuarioId)
     {
         InitializeComponent();
-        BindingContext = new CalendarioViewModel(); // Certifique-se que o ViewModel est� ligado
+        _tipoUsuarioId = tipoUsuarioId;
+        BindingContext = new CalendarioViewModel(); // mantém seu ViewModel
     }
 
     private async void OnMesSelecionado(object sender, EventArgs e)
@@ -21,16 +24,15 @@ public partial class CalendarioPage : ContentPage
             var viewModel = BindingContext as CalendarioViewModel;
             if (viewModel != null && index >= 0 && index < viewModel.Meses.Count)
             {
+                // Usa a data atual + offset do índice
                 var data = DateTime.Now.AddMonths(index);
                 string nomeMes = viewModel.Meses[index];
                 int mes = data.Month;
                 int ano = data.Year;
 
-                await Navigation.PushAsync(new MiniCalendarioPage(nomeMes, mes, ano));
+                // 🔹 Repasse do tipo para MiniCalendarioPage
+                await Navigation.PushAsync(new MiniCalendarioPage(nomeMes, mes, ano, _tipoUsuarioId));
             }
         }
     }
 }
-
-
-

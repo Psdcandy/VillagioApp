@@ -1,52 +1,65 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using VillagioApi.Data;
-using VillagioApi.Model;
+using Microsoft.Data.SqlClient;
 
-namespace VillagioApi.Controller
+[ApiController]
+[Route("api/[controller]")]
+public class ReservasController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ReservasController : ControllerBase
+    private readonly SqlConnection _connection;
+
+    public ReservasController(IConfiguration config)
     {
-        private readonly DBContext _context;
+        _connection = new SqlConnection(config.GetConnectionString("DefaultConnection"));
+    }
 
-        public ReservasController(DBContext context)
+    /// <summary>
+    /// Retorna horários disponíveis para uma data, considerando quantidade de visitantes e tipo de usuário.
+    /// </summary>
+    [HttpGet("disponibilidade")]
+    public async Task<IActionResult> GetDisponibilidade(DateTime data, int quantidade, int tipoUsuarioId)
+    {
+        const int VagasPorHorario = 50;
+
+        var horarios = new List<string>
         {
-            _context = context;
-        }
+            "08:00", "09:00", "10:00", "11:00",
+            "12:00", "14:00", "15:00",
+            "16:00", "17:00"
+        };
 
-        [HttpPost]
-        public async Task<IActionResult> CriarReserva([FromBody] Reserva reserva)
+        var resultado = new List<object>();
+
+        foreach (var horario in horarios)
         {
-            var usuario = await _context.Usuarios.FindAsync(reserva.UsuarioId);
-            if (usuario == null) return BadRequest("Usuário não encontrado.");
+            string query = @"
+                SELECT ISNULL(SUM(VagasReservadas), 0) AS Reservadas
+                FROM RESERVAS
+                WHERE Data = @Data AND Horario = @Horario";
 
-            var horario = await _context.Horarios.FindAsync(reserva.HorarioId);
-            if (horario == null) return BadRequest("Horário inválido.");
+            using var cmd = new SqlCommand(query, _connection);
+            cmd.Parameters.AddWithValue("@Data", data.Date);
+            cmd.Parameters.AddWithValue("@Horario", horario);
 
-            // Validações para Família
-            if (usuario.TipoUsuarioId == 1) // Família
+            await _connection.OpenAsync();
+            int reservadas = Convert.ToInt32(await cmd.ExecuteScalarAsync());
+            await _connection.CloseAsync();
+
+            int vagasDisponiveis = VagasPorHorario - reservadas;
+
+            bool disponivel = tipoUsuarioId == 2
+                ? vagasDisponiveis == VagasPorHorario // Agência só se horário estiver 100% livre
+                : vagasDisponiveis >= quantidade;     // Família precisa ter vagas suficientes
+
+            if (disponivel)
             {
-                if (reserva.DataReserva.DayOfWeek != DayOfWeek.Saturday &&
-                    reserva.DataReserva.DayOfWeek != DayOfWeek.Sunday)
-                    return BadRequest("Família só pode reservar aos finais de semana.");
-
-                if (horario.HoraInicio == TimeSpan.FromHours(12))
-                    return BadRequest("Família não pode reservar entre 12h e 13h.");
-
-                var totalReservado = await _context.Reservas
-                    .Where(r => r.DataReserva.Date == reserva.DataReserva.Date && r.HorarioId == reserva.HorarioId)
-                    .SumAsync(r => r.Quantidade);
-
-                if (totalReservado + reserva.Quantidade > 50)
-                    return BadRequest("Limite de 50 vagas por horário atingido.");
+                resultado.Add(new
+                {
+                    Horario = horario,
+                    VagasDisponiveis = vagasDisponiveis
+                });
             }
-
-            _context.Reservas.Add(reserva);
-            await _context.SaveChangesAsync();
-
-            return Ok("Reserva criada com sucesso.");
         }
+
+        return Ok(resultado);
     }
 }

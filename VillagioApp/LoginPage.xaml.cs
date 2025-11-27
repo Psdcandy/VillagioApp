@@ -20,28 +20,6 @@ public partial class LoginPage : ContentPage
         CnpjEntry.IsVisible = tipoUsuario == "Agencia";
     }
 
-    // Funções utilitárias para normalização
-    private static string NormalizeText(string? input)
-    {
-        if (string.IsNullOrWhiteSpace(input)) return string.Empty;
-
-        var normalized = input.Trim().Normalize(NormalizationForm.FormD);
-        var sb = new StringBuilder(normalized.Length);
-
-        foreach (var ch in normalized)
-        {
-            var uc = CharUnicodeInfo.GetUnicodeCategory(ch);
-            if (uc != UnicodeCategory.NonSpacingMark &&
-                uc != UnicodeCategory.SpacingCombiningMark &&
-                uc != UnicodeCategory.EnclosingMark)
-            {
-                sb.Append(char.ToLowerInvariant(ch));
-            }
-        }
-
-        return sb.ToString().Normalize(NormalizationForm.FormC);
-    }
-
     private static string DigitsOnly(string? s) =>
         new string((s ?? string.Empty).Where(char.IsDigit).ToArray());
 
@@ -60,7 +38,7 @@ public partial class LoginPage : ContentPage
         };
 
         // Normaliza e valida campos
-        string nome = NormalizeText(NomeEntry.Text);
+        string nome = (NomeEntry.Text);
         string telefone = DigitsOnly(TelefoneEntry.Text);
 
         if (string.IsNullOrWhiteSpace(nome))
@@ -108,11 +86,15 @@ public partial class LoginPage : ContentPage
 
         HttpResponseMessage response = await client.PostAsJsonAsync("api/Usuario/login", loginDto, options);
 
+
         if (response.IsSuccessStatusCode)
         {
             await DisplayAlert("Sucesso", "Login realizado com sucesso!", "OK");
-            await Navigation.PushAsync(new CalendarioPage());
+
+            // 🔹 Passe o TipoUsuarioId para a próxima página
+            await Navigation.PushAsync(new CalendarioPage(loginDto.TipoUsuarioId));
         }
+
         else
         {
             string errorMsg = await response.Content.ReadAsStringAsync();

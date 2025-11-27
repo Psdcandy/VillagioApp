@@ -1,4 +1,5 @@
-﻿using Microsoft.Maui.Controls;
+﻿
+using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Shapes;
 using System.Globalization;
 
@@ -11,6 +12,14 @@ public partial class MiniCalendarioPage : ContentPage
     private readonly DateTime _dataInicial;
     private readonly DateTime _dataFinal;
     private DateTime? _diaSelecionado;
+
+    // 🔹 NOVO: tipo do usuário (1 = Família, 2 = Agência)
+    private readonly int _tipoUsuarioId;
+
+    private readonly List<string> todasFrutas = new()
+{
+    "uva", "goiaba", "morango", "lichia", "pêssego"
+};
 
     private readonly Dictionary<int, List<string>> frutasPorMes = new()
     {
@@ -28,17 +37,15 @@ public partial class MiniCalendarioPage : ContentPage
         { 12, new() { "uva", "goiaba", "morango", "lichia" } }
     };
 
-    private readonly List<string> todasFrutas = new()
-    {
-        "uva", "goiaba", "morango", "lichia", "pêssego"
-    };
 
-    public MiniCalendarioPage(string nomeMes, int mes, int ano)
+    public MiniCalendarioPage(string nomeMes, int mes, int ano, int tipoUsuarioId)
     {
+
         InitializeComponent();
 
         _mesAtual = mes;
         _anoAtual = ano;
+        _tipoUsuarioId = tipoUsuarioId; // 1 = Família, 2 = Agência
 
         _dataInicial = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
         _dataFinal = _dataInicial.AddMonths(5);
@@ -76,11 +83,15 @@ public partial class MiniCalendarioPage : ContentPage
     {
         if (_diaSelecionado.HasValue)
         {
-            await Navigation.PushAsync(new VisitantesPage(_diaSelecionado.Value));
+            await Navigation.PushAsync(new VisitantesPage(_diaSelecionado.Value, _tipoUsuarioId));
         }
         else
         {
-            await DisplayAlert("Selecione um dia", "Por favor, selecione um sábado ou domingo antes de prosseguir.", "OK");
+            // 🔹 Mensagem adaptada conforme tipo
+            string msg = _tipoUsuarioId == 1
+                ? "Por favor, selecione um sábado ou domingo antes de prosseguir."
+                : "Por favor, selecione um dia no calendário antes de prosseguir.";
+            await DisplayAlert("Selecione um dia", msg, "OK");
         }
     }
 
@@ -157,23 +168,27 @@ public partial class MiniCalendarioPage : ContentPage
 
             var dataDia = new DateTime(_anoAtual, _mesAtual, dia);
             var diaSemana = dataDia.DayOfWeek;
+
+            // 🔹 Regra adaptada por tipo:
+            // Família (1) => só sábado/domingo; Agência (2) => todos os dias
             bool ehFinalDeSemana = diaSemana == DayOfWeek.Saturday || diaSemana == DayOfWeek.Sunday;
+            bool diaDisponivel = _tipoUsuarioId == 2 ? true : ehFinalDeSemana;
 
             var btnDia = new Button
             {
                 Text = dia.ToString(),
                 WidthRequest = 45,
                 HeightRequest = 45,
-                BackgroundColor = ehFinalDeSemana ? Colors.White : Colors.LightGray,
+                BackgroundColor = diaDisponivel ? Colors.White : Colors.LightGray,
                 BorderColor = Colors.Green,
                 BorderWidth = 1,
                 CornerRadius = 5,
                 FontSize = 10,
                 TextColor = Colors.Black,
-                IsEnabled = ehFinalDeSemana
+                IsEnabled = diaDisponivel
             };
 
-            if (ehFinalDeSemana)
+            if (diaDisponivel)
             {
                 btnDia.Clicked += (s, e) =>
                 {

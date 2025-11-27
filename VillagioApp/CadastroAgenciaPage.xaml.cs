@@ -102,7 +102,7 @@ public partial class CadastroAgenciaPage : ContentPage
             if (response.IsSuccessStatusCode)
             {
                 await DisplayAlert("Sucesso", "Cadastro realizado com sucesso!", "OK");
-                await Navigation.PushAsync(new CalendarioPage());
+                await Navigation.PushAsync(new CalendarioPage(2));
             }
             else
             {
