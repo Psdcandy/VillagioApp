@@ -16,14 +16,14 @@
                 Margin="0,0,0,30"
                 SemanticProperties.Description="Logo Villagio" />
 
+
             <!-- Border do título -->
-            <Border
-                BackgroundColor="#F0F0F0"
-                Stroke="Purple"
-                StrokeShape="RoundRectangle 10"
-                WidthRequest="280"
-                Padding="20"
-                Margin="20,30,20,0">
+            <Border BackgroundColor="#F0F0F0"
+                    Stroke="Purple"
+                    StrokeShape="RoundRectangle 10"
+                    WidthRequest="280"
+                    Padding="20"
+                    Margin="20,30,20,0">
                 <Label Text="Complete a reserva"
                        FontSize="26"
                        FontFamily="CanvasIn"
@@ -31,197 +31,58 @@
                        TextColor="Black" />
             </Border>
 
-
-
-            <!-- Border dos dados da reserva -->
-            <Border
-                BackgroundColor="#F0F0F0"
-                Stroke="Purple"
-                StrokeShape="RoundRectangle 15"
-                Padding="20"
-                Margin="20,10,20,20"
-                WidthRequest="380">
+            <!-- Border dos dados -->
+            <Border BackgroundColor="#F0F0F0"
+                    Stroke="Purple"
+                    StrokeShape="RoundRectangle 15"
+                    Padding="20"
+                    Margin="20,10,20,20"
+                    WidthRequest="380">
 
                 <VerticalStackLayout Spacing="15">
 
                     <!-- Total de visitantes -->
                     <HorizontalStackLayout HorizontalOptions="Center" Spacing="8">
-                        <Label Text="Total de visitantes:"
-                               FontSize="14"
-                               FontAttributes="Bold"
-                               TextColor="Green"
-                               WidthRequest="155"
-                               VerticalTextAlignment="Center" />
-
-                        <Button Text="−"
-                                Clicked="OnDiminuirTotalClicked"
-                                WidthRequest="25"
-                                HeightRequest="25"
-                                                               FontSize="12" FontFamily="Sans3"
-                                BackgroundColor="#F0F0F0"
-                                BorderColor="Purple"
-                                BorderWidth="1"
-                                CornerRadius="8"
-                                TextColor="Black"
-                                VerticalOptions="Center" />
-
+                        <Label Text="Total:" FontSize="18" TextColor="Black" />
                         <Entry x:Name="TotalEntry"
-                               Placeholder="0"
+                               WidthRequest="80"
                                Keyboard="Numeric"
-                               WidthRequest="50"
-                               Background="Green"
-                               TextColor="White"
-                               FontSize="12" FontFamily="Sans3"
-                               HorizontalOptions="Center"
-                               HorizontalTextAlignment="Center"
-                               VerticalOptions="Center" />
-
-                        <Button Text="+"
-                                Clicked="OnAumentarTotalClicked"
-                                WidthRequest="25"
-                                HeightRequest="25"
-                                                               FontSize="12" FontFamily="Sans3"
-                                BackgroundColor="#F0F0F0"
-                                BorderColor="Purple"
-                                BorderWidth="1"
-                                CornerRadius="8"
-                                TextColor="Black"
-                                VerticalOptions="Center" />
+                               HorizontalOptions="Center" />
+                        <Button Text="-" Clicked="OnDiminuirTotalClicked" WidthRequest="40" />
+                        <Button Text="+" Clicked="OnAumentarTotalClicked" WidthRequest="40" />
                     </HorizontalStackLayout>
-
-                    <!-- Divisão por tipo -->
-                    <Label Text="Divisão por tipo:" FontSize="16" FontAttributes="Bold" TextColor="Green" Margin="0,0,0,20" />
 
                     <!-- Adultos -->
                     <HorizontalStackLayout HorizontalOptions="Center" Spacing="8">
-                        <Label Text="Adultos (R$12,00):"
-                               FontSize="14"
-                               TextColor="Purple"
-                               WidthRequest="155"
-                               VerticalTextAlignment="Center" />
-
-                        <Button Text="−"
-                                Clicked="OnDiminuirAdultoClicked"
-                                WidthRequest="35"
-                                HeightRequest="15"
-                                BackgroundColor="#F0F0F0"
-                                BorderColor="Purple"
-                                BorderWidth="1"
-                                CornerRadius="8"
-                                                               FontSize="12" FontFamily="Sans3"
-                                TextColor="Black"
-                                VerticalOptions="Center" />
-
+                        <Label Text="Adultos:" FontSize="18" TextColor="Black" />
                         <Entry x:Name="AdultoEntry"
-                               Placeholder="0"
+                               WidthRequest="80"
                                Keyboard="Numeric"
-                               WidthRequest="50"
-                                                              FontSize="12" FontFamily="Sans3"
-                               Background="Green"
-                               TextColor="White"
-                               HorizontalOptions="Center"
-                               HorizontalTextAlignment="Center"
-                               VerticalOptions="Center" />
-
-                        <Button Text="+"
-                                Clicked="OnAumentarAdultoClicked"
-                                WidthRequest="25"
-                                HeightRequest="25"
-                                BackgroundColor="#F0F0F0"
-                                BorderColor="Purple"
-                                BorderWidth="1"
-                                CornerRadius="8"
-                                                               FontSize="12" FontFamily="Sans3"
-                                TextColor="Black"
-                                VerticalOptions="Center" />
+                               HorizontalOptions="Center" />
+                        <Button Text="-" Clicked="OnDiminuirAdultoClicked" WidthRequest="40" />
+                        <Button Text="+" Clicked="OnAumentarAdultoClicked" WidthRequest="40" />
                     </HorizontalStackLayout>
 
                     <!-- Meia entrada -->
                     <HorizontalStackLayout HorizontalOptions="Center" Spacing="8">
-                        <Label Text="Meia entrada (R$6,00):"
-                               FontSize="14"
-                               TextColor="Purple"
-                               WidthRequest="155"
-                               VerticalTextAlignment="Center" />
-
-                        <Button Text="−"
-                                Clicked="OnDiminuirMeiaClicked"
-                                WidthRequest="25"
-                                HeightRequest="25"
-                                                               FontSize="12" FontFamily="Sans3"
-                                BackgroundColor="#F0F0F0"
-                                BorderColor="Purple"
-                                BorderWidth="1"
-                                CornerRadius="8"
-                                TextColor="Black"
-                                VerticalOptions="Center" />
-
+                        <Label Text="Meia:" FontSize="18" TextColor="Black" />
                         <Entry x:Name="MeiaEntry"
-                               Placeholder="0"
+                               WidthRequest="80"
                                Keyboard="Numeric"
-                               WidthRequest="50"
-                               Background="Green"
-                               TextColor="White"
-                                                              FontSize="12" FontFamily="Sans3"
-                               HorizontalOptions="Center"
-                               HorizontalTextAlignment="Center"
-                               VerticalOptions="Center" />
-
-                        <Button Text="+"
-                                Clicked="OnAumentarMeiaClicked"
-                                WidthRequest="25"
-                                HeightRequest="25"
-                                                               FontSize="12" FontFamily="Sans3"
-                                BackgroundColor="#F0F0F0"
-                                BorderColor="Purple"
-                                BorderWidth="1"
-                                CornerRadius="8"
-                                TextColor="Black"
-                                VerticalOptions="Center" />
+                               HorizontalOptions="Center" />
+                        <Button Text="-" Clicked="OnDiminuirMeiaClicked" WidthRequest="40" />
+                        <Button Text="+" Clicked="OnAumentarMeiaClicked" WidthRequest="40" />
                     </HorizontalStackLayout>
 
                     <!-- Não pagantes -->
                     <HorizontalStackLayout HorizontalOptions="Center" Spacing="8">
-                        <Label Text="Não pagantes (R$0,00):"
-                               FontSize="14"
-                               TextColor="Purple"
-                               WidthRequest="155"
-                               VerticalTextAlignment="Center" />
-
-                        <Button Text="−"
-                                Clicked="OnDiminuirNaoPaganteClicked"
-                                WidthRequest="25"
-                                HeightRequest="25"
-                                                               FontSize="12" FontFamily="Sans3"
-                                BackgroundColor="#F0F0F0"
-                                BorderColor="Purple"
-                                BorderWidth="1"
-                                CornerRadius="8"
-                                TextColor="Black"
-                                VerticalOptions="Center" />
-
+                        <Label Text="Não pagantes:" FontSize="18" TextColor="Black" />
                         <Entry x:Name="NaoPaganteEntry"
-                               Placeholder="0"
+                               WidthRequest="80"
                                Keyboard="Numeric"
-                               WidthRequest="50"
-                               Background="Green"
-                               TextColor="White"
-                                                              FontSize="12" FontFamily="Sans3"
-                               HorizontalOptions="Center"
-                               HorizontalTextAlignment="Center"
-                               VerticalOptions="Center" />
-
-                        <Button Text="+"
-                                Clicked="OnAumentarNaoPaganteClicked"
-                                WidthRequest="25"
-                                HeightRequest="25"
-                                                               FontSize="12" FontFamily="Sans3"
-                                BackgroundColor="#F0F0F0"
-                                BorderColor="Purple"
-                                BorderWidth="1"
-                                CornerRadius="8"
-                                TextColor="Black"
-                                VerticalOptions="Center" />
+                               HorizontalOptions="Center" />
+                        <Button Text="-" Clicked="OnDiminuirNaoPaganteClicked" WidthRequest="40" />
+                        <Button Text="+" Clicked="OnAumentarNaoPaganteClicked" WidthRequest="40" />
                     </HorizontalStackLayout>
 
                     <!-- Café opcional -->
@@ -233,7 +94,7 @@
                             WidthRequest="300"
                             HorizontalOptions="Center">
                         <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
-                            <Label Text="Incluir café da manhã?" FontSize="18" VerticalTextAlignment="Center" TextColor="Green" />
+                            <Label Text="Incluir café da manhã?" FontSize="18" TextColor="Green" />
                             <CheckBox x:Name="CafeCheckBox" CheckedChanged="OnCafeCheckedChanged" />
                         </HorizontalStackLayout>
                     </Border>
@@ -261,5 +122,6 @@
             </Border>
         </VerticalStackLayout>
     </ScrollView>
+
 </ContentPage>
 

@@ -1,20 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace VillagioApi.Model
 {
+
+    [Table("HORARIOS")]
     public class Horario
     {
-        [Key]
         public int Id { get; set; }
 
         [Required]
-        public TimeSpan HoraInicio { get; set; }
+        [MaxLength(5)]
+        [Column("Horario")]
+        public string Hora { get; set; } = string.Empty; // Ex: "08:00"
 
         [Required]
-        public TimeSpan HoraFim { get; set; }
-
-        public bool DisponivelFamilia { get; set; } = true;
-
-        public bool DisponivelAgencia { get; set; } = true;
+        [Column("CapacidadeMaxima")]
+        public int CapacidadeMaxima { get; set; } = 50; // Padrão 50 vagas
     }
+
 }

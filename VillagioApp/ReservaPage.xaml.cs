@@ -23,7 +23,7 @@ namespace VillagioApp
 
         public ReservaPage(DateTime dataSelecionada, string horarioSelecionado, int visitantes, int tipoUsuarioId)
         {
-            InitializeComponent();
+            InitializeComponent(); 
             _dataSelecionada = dataSelecionada;
             _horarioSelecionado = horarioSelecionado;
             _visitantes = visitantes;
@@ -32,6 +32,22 @@ namespace VillagioApp
             Title = $"Reserva para {dataSelecionada:dd/MM} às {horarioSelecionado}";
             TotalEntry.Text = _visitantes.ToString();
             AtualizarValorFinal();
+        }
+
+        private void OnDiminuirTotalClicked(object sender, EventArgs e)
+        {
+            if (int.TryParse(TotalEntry.Text, out int valor) && valor > 1)
+                TotalEntry.Text = (valor - 1).ToString();
+            else
+                TotalEntry.Text = "1";
+        }
+
+        private void OnAumentarTotalClicked(object sender, EventArgs e)
+        {
+            if (int.TryParse(TotalEntry.Text, out int valor))
+                TotalEntry.Text = (valor + 1).ToString();
+            else
+                TotalEntry.Text = "1";
         }
 
         // Adultos
